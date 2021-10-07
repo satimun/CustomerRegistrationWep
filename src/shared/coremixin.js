@@ -28,7 +28,8 @@ export default {
       saveRequire: false,
       permissions: [],
       isLoaded: false,
-      socket: null
+      socket: null,
+      publicPath: process.env.BASE_URL
     }
   },
   methods: {

@@ -167,8 +167,8 @@
           aria-expanded="false"
         >
           <img
-            alt="Icewall Tailwind HTML Admin Template"
-            :src="require(`@/assets/images/${$f()[9].photos[0]}`)"
+            alt="Profile picture"
+            :src="`${avatar}`"
           />
         </div>
         <div class="dropdown-menu w-56">
@@ -176,15 +176,16 @@
             class="dropdown-menu__content box bg-theme-11 dark:bg-dark-6 text-white"
           >
             <div class="p-4 border-b border-theme-12 dark:border-dark-3">
-              <div class="font-medium">{{ $f()[0].users[0].name }}</div>
+              <div class="font-medium">{{ this.member.fullname }}</div>
               <div class="text-xs text-theme-13 mt-0.5 dark:text-gray-600">
-                {{ $f()[0].jobs[0] }}
+                {{ this.member.email }}
               </div>
             </div>
             <div class="p-2">
               <a
-                href=""
+                href="#"
                 class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md"
+                @click="onProfile"
               >
                 <UserIcon class="w-4 h-4 mr-2" /> Profile
               </a>
@@ -252,8 +253,32 @@ export default defineComponent({
     },
     list() {
       return this.$route.matched.filter((route) => route.name || route.meta.label)
+    },
+    username() {
+      return this.$localStorage.get('User')
+    },
+    avatar() {
+      return this.member && this.member.picture ? this.member.picture : this.imgPath
     }
 
+  },
+
+  mounted () {
+    console.log(this.username)
+    if (this.username) {
+      this.getUser()
+    }
+  },
+  data() {
+    return {
+      member: {
+        name: '',
+        email: '',
+        picture: '',
+        id: ''
+      },
+      imgPath: require('@/assets/images/profile.png')
+    }
   },
   methods: {
     onSignOut() {
@@ -261,11 +286,34 @@ export default defineComponent({
         callback: res => {
           this.$localStorage.remove('Token')
           this.$localStorage.remove('User')
+          this.$localStorage.remove('UMail')
           this.$router.push('/signin')
         }
       })
+    },
+    getUser() {
+      this.$root.api.MemberGet({
+        callback: res => {
+          this.member = res
+        }
+      })
+    },
+    onProfile() {
+      if (this.member) {
+        if (this.member.type == 'S') {
+          this.$router.push('/Staff/Profile')
+        } else {
+          this.$router.push('/Profile')
+        }
+      }
     }
-
+  },
+  watch: {
+    username(newVal, oldVal) {
+      if (newVal) {
+        this.getUser()
+      }
+    }
   }
 })
 </script>

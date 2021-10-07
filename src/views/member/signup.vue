@@ -327,6 +327,12 @@
               >
                 {{$t('signup.resendemail')}}
               </button>
+              <button
+                class="btn btn-outline-secondary py-2 px-3 w-full xl:w-32 mt-3 xl:mt-0 align-top"
+                @click="signin"
+              >
+                {{$t('button.signin')}}
+              </button>
             </div>
             <div class="intro-x w-full grid grid-cols-12 gap-4 h-1 mt-5">
                 <div class="col-span-3 h-full rounded bg-theme-10"></div>
@@ -573,7 +579,7 @@ export default defineComponent({
       this.$root.api.MemberResendEmail({
         data: { email: this.$route.query.email },
         callback: res => {
-          this.$root.AlertMessage('success')
+          this.$root.AlertMessage('success', 'Resend email success!!')
         }
       })
     },

@@ -225,6 +225,7 @@ export default defineComponent({
       if (res != null) {
         this.$localStorage.set('Token', res.token)
         this.$localStorage.set('User', res.username)
+        this.$localStorage.set('UMail', res.email)
 
         window.location.href = GetObjVal(this.$route.query, 'path', '/')
         Toastify({
