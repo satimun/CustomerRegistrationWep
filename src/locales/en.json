@@ -1,0 +1,86 @@
+{
+  "config" : {
+    "title1": "Product",
+    "title2": "Registration"
+  },
+    "button" : {
+        "signin" : "Sign In",
+        "signup" : "Sign Up",
+        "register" : "Register",
+        "login" : "Login",
+        "resetpassword" : "Reset Password",
+        "changepassword" : "Change Password"
+    },
+    "dic": {
+        "error": "Error",
+        "warning": "Warning",
+        "success": "Success"
+      },
+    "signup": {
+        "title1": "Product",
+        "title2": "Registration",
+        "introInfo1": "A few more clicks to ",
+        "introInfo2": "sign up to your account.",
+        "introInfo3": "Manage all your registered products in one place",
+        "introForm": "A few more clicks to sign in to your account. Manage all your registered products in one place",
+        "subject": "Sign Up",
+        "email": "Email",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "mobile_no": "Mobile Number",
+        "location": "Location",
+        "shipowner_amt": "Total Ship Owner",
+        "shipusekkfnet_amt": "Total Ship use KKF Nets",
+        "picture_path": "Your Picture",
+        "password": "Password",
+        "confirmpass": "Password Confirmation",
+        "goodPassword": "Must contain a-z and A-Z and 0-9",
+        "agree": "I agree to the KKF Customer Registration",
+        "policy": "Privacy Policy",
+        "success_title": "Registration success!",
+        "success_info": "Please check your e-mail for further info!",
+        "failed_title": "Registration failed!",
+        "failed_info": "Please check the fileld form.",
+        "msg1": "We sent confirmation email to {0}",
+        "msg2" : "Please follow the instructions to complete your registration.",
+        "resendemail": "Resend Email",
+        "msg3": "If you haven't received the email, do the following",
+        "check1": "Make sure provided email address is correct.",
+        "check2": "Check spam or other folders.",
+        "check3": "Set email address whitelist.",
+        "check4": "Check the mail client work normally.",
+        "conftext": "Email Verification Success",
+        "welcome": "Welcome To KKF Customer Registration.",
+        "failtext": "Email Verification Fail.",
+        "contacttext": "Please Contact Administrator."
+
+      },
+      "signin" : {
+        "title1": "Product",
+        "title2": "Registration",
+        "introInfo1": "A few more clicks to ",
+        "introInfo2": "sign in to your account.",
+        "introInfo3": "Manage all your registered products in one place.",
+        "introForm": "A few more clicks to sign in to your account. Manage all your registered products in one place",
+        "subject": "Sign In",
+        "remember_me": "Remember me",
+        "forgot_password": "Forgot Password?",
+        "agree": "By signin up, you agree to our",
+        "term": "Terms and Conditions",
+        "policy": "Privacy Policy"
+
+      },
+      "forgotpassword" : {
+        "title1": "Product",
+        "title2": "Registration",
+        "introInfo1": "A few more clicks to ",
+        "introInfo2": " reset your password.",
+        "introInfo3": "Manage all your registered products in one place.",
+        "introForm": "You can reset your password if you forget it.",
+        "subject": "Forgot Password",
+        "subject2": "Reset Password",
+        "warntext": "Please check your email to change your password.",
+        "success": "Change Password success."
+
+      }
+}
