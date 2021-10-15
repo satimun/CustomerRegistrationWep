@@ -2,10 +2,10 @@
   <!-- BEGIN: Mobile Menu -->
   <div class="mobile-menu md:hidden">
     <div class="mobile-menu-bar">
-      <a href class="flex mr-auto">
+      <a href="/" class="flex mr-auto">
         <img
-          alt="Icewall Tailwind HTML Admin Template"
-          class="w-6"
+          alt="KKF Product Registration"
+          class="h-10 image-fit zoom-in scale-110"
           src="@/assets/images/logokkf.png"
         />
       </a>

@@ -9,11 +9,11 @@
           <a href="" class="-intro-x flex items-center pt-5">
             <img
               alt="Icewall Tailwind HTML Admin Template"
-              class="w-6"
+              class="h-10"
               :src="require(`@/assets/images/logokkf.png`)"
             />
             <span class="text-white text-lg ml-3">
-              {{$t('signin.title1')}} <span class="font-medium"> {{$t('signin.title2')}}</span>
+              {{$t('config.title1')}} <span class="font-medium"> {{$t('config.title2')}}</span>
             </span>
           </a>
           <div class="my-auto">
@@ -112,33 +112,34 @@
                 <input
                   id="remember_me"
                   type="checkbox"
-                  class="form-check-input border mr-2"
+                  class="form-check-input border mr-2 hidden"
                   v-model="form.remember_me"
                   ref="remember_me"
                 />
-                <label class="cursor-pointer select-none" for="remember_me"
+                <label class="cursor-pointer select-none hidden" for="remember_me"
                   >{{$t('signin.remember_me')}}</label
                 >
               </div>
-              <a href="#" @click="forgot">{{$t('signin.forgot_password')}}</a>
+              <a href="javascript:;" @click="forgot">{{$t('signin.forgot_password')}}</a>
             </div>
             <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
               <button
-                class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top"
+                class="btn btn-primary py-3 px-4 w-full align-top"
                 type="submit"
-                @click="onSubmit"
               >
                 {{$t('button.login')}}
               </button>
-              <button
-                class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top"
-                 @click="signup"
-              >
-                {{$t('button.signup')}}
-              </button>
             </div>
+			<div
+              class="intro-x flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm mt-4"
+            >
+			<div class="flex items-center mr-auto">
+				{{$t('signin.notmemer')}} <a href="javascript:;" @click="signup" class="text-theme-1 pl-2"> {{$t('signin.create_account')}}</a>
+			</div>
+
+			</div>
             <div
-              class="intro-x mt-10 xl:mt-24 text-gray-700 dark:text-gray-600 text-center xl:text-left"
+              class="intro-x mt-10 xl:mt-14 text-gray-700 dark:text-gray-600 text-center xl:text-left"
             >
               {{$t('signin.agree')}} <br />
               <a class="text-theme-17 dark:text-gray-300" href=""
@@ -222,9 +223,13 @@ export default defineComponent({
       if (this.v$.$error) return false
 
       var res = await this.signin()
+      console.log(res)
       if (res != null) {
         this.$localStorage.set('Token', res.token)
         this.$localStorage.set('User', res.username)
+        this.$localStorage.set('UMail', res.email)
+        this.$localStorage.set('UCode', res.code)
+        this.$localStorage.set('UType', res.type)
 
         window.location.href = GetObjVal(this.$route.query, 'path', '/')
         Toastify({
@@ -251,7 +256,7 @@ export default defineComponent({
       })
     },
     signup() {
-      this.$router.push('/SignUp')
+      this.$router.push('/signup')
     },
     forgot() {
       this.$router.push('/forgotpassword')

@@ -1,7 +1,7 @@
 {
   "config" : {
-    "title1": "Product",
-    "title2": "Registration"
+    "title1": "KKF",
+    "title2": "Product Registration"
   },
     "button" : {
         "signin" : "Sign In",
@@ -9,12 +9,59 @@
         "register" : "Register",
         "login" : "Login",
         "resetpassword" : "Reset Password",
-        "changepassword" : "Change Password"
+        "changepassword" : "Change Password",
+		"save" : "Save",
+		"ok" : "OK",
+		"cancel" : "Cancel",
+		"go" : "GO",
+		"reset" : "Reset"
     },
     "dic": {
         "error": "Error",
         "warning": "Warning",
-        "success": "Success"
+        "success": "Success",
+        "lang" : "Lang",
+        "connectservefail": "Unable to connect to server.",
+		"rowselect": " | {n} row selected | {n} rows selected",
+		"hidefilter": "Hide Filter",
+		"viewsetting": "View/Setting",
+		"columshow": "Column Visible",
+		"scrollh": "Scroll Horizontal",
+		"export1": "Export Excel File",
+		"export2": "Export Excel Visible",
+		"reset": "Reset",
+		"selectedonclick": "Selected On Click",
+		"sortascending": "Sort Ascending",
+		"sortdescending": "Sort Descending",
+		"hidecolumn": "Hide Column",
+		"pin": "Pin",
+		"unpin": "Unpin",
+		"filter": "Filter",
+		"search": "Search",
+		"add": "Add",
+		"clone": "Clone",
+		"view": "Edit",
+		"edit": "View",
+		"delete": "Delete",
+		"deleted": "Deleted",
+		"_no": "No",
+		"code": "Code",
+		"description": "Description",
+		"status": "Status",
+		"lastupdate": "Last Update",
+		"nodata": "No Data Available",
+		"show": "Show",
+		"all": "All",
+		"entries": "entries",
+		"previous": "Previous",
+		"next": "Next",
+		"ok": "Ok",
+		"save": "Save",
+		"saved": "Saved successfully.",
+		"cancel": "Cancel",
+		"msgdel": "Confirm data deletion.",
+		"reload": "Reload Data",
+		"more": "See more"
       },
     "signup": {
         "title1": "Product",
@@ -52,7 +99,9 @@
         "conftext": "Email Verification Success",
         "welcome": "Welcome To KKF Customer Registration.",
         "failtext": "Email Verification Fail.",
-        "contacttext": "Please Contact Administrator."
+        "contacttext": "Please Contact Administrator.",
+		"memer": "Already have an Account? ",
+		"sigin": "Sign in"
 
       },
       "signin" : {
@@ -67,7 +116,9 @@
         "forgot_password": "Forgot Password?",
         "agree": "By signin up, you agree to our",
         "term": "Terms and Conditions",
-        "policy": "Privacy Policy"
+        "policy": "Privacy Policy",
+		"notmemer": "Not registered yet?",
+		"create_account": "Create an Account"
 
       },
       "forgotpassword" : {
@@ -81,6 +132,50 @@
         "subject2": "Reset Password",
         "warntext": "Please check your email to change your password.",
         "success": "Change Password success."
+      },
+	  "dashboard_user":{
+		  "title1":"My KKF",
+		  "title2": "The last 5 registered products",
+		  "register_pc" : "Register completed (PC)",
+		  "register_bc" : "Register completed (QR code)",
+		  "pi_qty" : "PI qty",
+		  "bc_inprogress" : "B/C in progress"
+	  },
+	  "registerqrcode": {
+		  "title1": "Register KKF Product",
+		  "info1": "Please input your qrcode.",
+		  "qrscanpath" : "QR scan path",
+		  "location" : "Location",
+		  "coordinate" : "GPS coordinate",
+		  "info2": "Thank you for your product registration",
+		  "qrcode": "QR Code",
+		  "orderno": "Order No.",
+		  "product": "Product Detail",
+		  "export_date": "Export (CI Date)",
+		  "register_date" : "Register Date"
 
-      }
+	  },
+	  "report_user" : {
+		  "title1": "My Products",
+		  "field": "Field",
+		  "qrcode":"Qr code",
+		  "product":"Product detail",
+		  "orderno":"Order No.",
+		  "type":"Type",
+		  "value":"Value",
+		  "member":"Member detail"
+	  },
+	  "dashboard_staff":{
+		"title1":"My KKF",
+		"title2": "The last 5 registered products",
+		"register_pc" : "Register completed (PC)",
+		"register_bc" : "Register completed (QR code)",
+		"pi_qty" : "PI qty",
+		"bc_inprogress" : "B/C in progress",
+		"order_qty" : "Order qty",
+		"registerid_qty" : "Member registered qty",
+		"qrcode_qty" : "Qr code qty",
+		"barcode_qty" : "Barcode qty",
+		"bc_progress" : "B/C progress"
+	}
 }

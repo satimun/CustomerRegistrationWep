@@ -94,7 +94,7 @@
           class="align-middle"
         >
           <b-dropdown class="btnGrid navbar-toggler" variant="default" right no-caret>
-            <template v-slot:button-content>
+            <template slot="button-content">
               <div class="ellipsis">
                 <span class="fa fa-ellipsis-v"></span>
               </div>
@@ -277,7 +277,7 @@
                           @show="subMenuVisible(field, true)"
                           @hidden="subMenuVisible(field, false)"
                         >
-                          <template v-slot:button-content>
+                          <template slot="button-content">
                             <i class="fa fa-chevron-down"></i>
                           </template>
                           <b-dropdown-item
@@ -358,7 +358,7 @@
                               @show="subMenuVisible(field2, true)"
                               @hidden="subMenuVisible(field2, false)"
                             >
-                              <template v-slot:button-content>
+                              <template slot="button-content">
                                 <i class="fa fa-chevron-down"></i>
                               </template>
                               <b-dropdown-item
@@ -768,12 +768,12 @@
 </template>
 
 <script>
-import resize from 'vue-resize-directive'
+import resize from "vue-resize-directive";
 import dic from '@/shared/dic'
-import ExcelJS from 'exceljs'
+import ExcelJS from "exceljs";
 import cellinput from '@/components/cellinput'
-import { GetObjVal, SetObjVal, ObjCopy, IsNull, Round } from '@/shared/utils'
-import { aggregationTypes } from '@/shared/define'
+import { GetObjVal, SetObjVal, ObjCopy, IsNull, Round } from "@/shared/utils";
+import { aggregationTypes } from "@/shared/define";
 
 export default {
   i18n: {
@@ -834,11 +834,11 @@ export default {
     },
     trackBy: {
       type: String,
-      default: 'id'
+      default: "id"
     },
     multiSortKey: {
       type: String,
-      default: 'alt'
+      default: "alt"
     },
     data: {
       type: [Array, Object],
@@ -850,7 +850,7 @@ export default {
     },
     btnAdd: {
       type: Boolean,
-      default: true /* null = visible and use Default Function, true = visible and option function */
+      default: true /*null = visible and use Default Function, true = visible and option function*/
     },
     btnClone: {
       type: Boolean,
@@ -963,45 +963,45 @@ export default {
     o_export_sheetName: {
       type: String,
       default: null
-    }
+    },
   },
   computed: {
-    helpVisible() { return typeof this.HelpClick === 'function' },
+    helpVisible() { return typeof this.HelpClick === "function"; },
     locale() {
-      return this.$root.$i18n.locale
+      return this.$root.$i18n.locale;
     },
     settingName() {
-      return 'grid_' + this.name
+      return "grid_" + this.name;
     },
     permissiongrid() {
-      return this.$root.getPermission()
+      return this.$root.getPermission();
     },
     selected() {
-      return this.getSelected()
+      return this.getSelected();
     },
     countColShow() {
-      let count = 1 + (this.o_row_drag ? 1 : 0)
+      let count = 1 + (this.o_row_drag ? 1 : 0);
       this.tableFields.filter(d => d._show && d.visible).forEach(d => {
         if (Array.isArray(d.groups)) {
-          count += d.groups.length
+          count += d.groups.length;
         } else {
-          count++
+          count++;
         }
-      })
-      return count
+      });
+      return count;
     },
     showBtnTitle() {
       return this.gridWidth > 1024
     }
   },
   mounted() {
-    this.onRender()
-    document.addEventListener('mouseup', this.onColLastResize)
-    document.addEventListener('mousemove', this.onColResize)
+    this.onRender();
+    document.addEventListener('mouseup', this.onColLastResize);
+    document.addEventListener('mousemove', this.onColResize);
   },
   data() {
     return {
-      eventPrefix: 'grid:',
+      eventPrefix: "grid:",
       tableData: [],
       tableFields: [],
       sortOrder: [],
@@ -1040,240 +1040,240 @@ export default {
       isUnResize: false,
       columnSubHeight: 35,
       gridWidth: 0
-    }
+    };
   },
   methods: {
     onRender() {
       this.tableFields = [
-        { name: '_drag', _width: 30, visible: this.o_row_drag, o_col: true },
-        { name: '_checkbox', _width: 32, pin: true, visible: this.o_col_checkbox, o_col: true },
-        { name: '_more', _width: 32, visible: this.col_viewmore, o_col: true }
-      ]
+        { name: "_drag", _width: 30, visible: this.o_row_drag, o_col: true },
+        { name: "_checkbox", _width: 32, pin: true, visible: this.o_col_checkbox, o_col: true },
+        { name: "_more", _width: 32, visible: this.col_viewmore, o_col: true }
+      ];
 
       this.fields.forEach(c => {
-        c.visibleOrg = c.visible
-        c.pinOrg = c.pin
+        c.visibleOrg = c.visible;
+        c.pinOrg = c.pin;
         if (Array.isArray(c.groups)) {
           c.groups.forEach(g => {
-            g.visibleOrg = g.visible
-          })
+            g.visibleOrg = g.visible;
+          });
         }
-      })
+      });
 
-      this.tableFields = this.tableFields.concat(this.fields)
+      this.tableFields = this.tableFields.concat(this.fields);
       if (!this.$localStorage.get(this.settingName)) {
-        this.genCustomSetting()
+        this.genCustomSetting();
       } else {
-        this.customSetting = JSON.parse(this.$localStorage.get(this.settingName))
+        this.customSetting = JSON.parse(this.$localStorage.get(this.settingName));
         if (this.customSetting.fields.length != this.tableFields.length) {
-          this.genCustomSetting()
+          this.genCustomSetting();
           // this.customSetting = JSON.parse(this.$localStorage.get(this.settingName));
         }
-        this.selectedOnClick = this.customSetting.selectedOnClick === undefined ? true : this.customSetting.selectedOnClick
-        this.grid_responsive = this.customSetting.grid_responsive || this.o_grid_responsive
-        this.perPage = this.customSetting.perPage
-        this.showFilter = this.customSetting.showFilter || this.o_col_showFilter
+        this.selectedOnClick = this.customSetting.selectedOnClick === undefined ? true : this.customSetting.selectedOnClick;
+        this.grid_responsive = this.customSetting.grid_responsive || this.o_grid_responsive;
+        this.perPage = this.customSetting.perPage;
+        this.showFilter = this.customSetting.showFilter || this.o_col_showFilter;
 
         this.customSetting.fields.forEach((c, i) => {
-          const tmp = this.tableFields.find(x => x.name === c.name)
+          let tmp = this.tableFields.find(x => x.name === c.name);
           if (tmp) {
-            const idx = this.tableFields.indexOf(tmp)
+            let idx = this.tableFields.indexOf(tmp);
             if (i != idx) {
-              this.tableFields.splice(idx, 1)
-              this.tableFields.splice(i, 0, tmp)
+              this.tableFields.splice(idx, 1);
+              this.tableFields.splice(i, 0, tmp);
             }
             if (!tmp.o_col) {
-              tmp.visible = c.visible
-              tmp.pin = c.pin
+              tmp.visible = c.visible;
+              tmp.pin = c.pin;
             }
-            if (tmp.name == '_more') tmp.visible = !this.grid_responsive
+            if (tmp.name == '_more') tmp.visible = !this.grid_responsive;
             if (Array.isArray(c.groups)) {
               c.groups.forEach(g => {
-                const tmp2 = tmp.groups.find(v => v.name === g.name)
-                if (tmp2) tmp2.visible = g.visible
-              })
+                let tmp2 = tmp.groups.find(v => v.name === g.name);
+                if (tmp2) tmp2.visible = g.visible;
+              });
             }
           }
-        })
+        });
       }
 
-      const pinCol = this.tableFields.filter(c => c.pin)
-      if (pinCol.length) this.pinFields = [...pinCol]
+      let pinCol = this.tableFields.filter(c => c.pin)
+      if (pinCol.length) this.pinFields = [...pinCol];
 
       setTimeout(() => {
-        const col = document.getElementsByClassName('th-fix-group')
+        let col = document.getElementsByClassName('th-fix-group');
         if (col.length) {
           // this.columnSubHeight = Math.min(...col.map(x => x.offsetHeight));
-          this.columnSubHeight = col[0].offsetHeight
+          this.columnSubHeight = col[0].offsetHeight;
         }
       }, 1000)
 
-      this.genTitle()
-      this.setData(this.data)
-      const el = document.getElementById(this.name)
-      this.onResize(el)
+      this.genTitle();
+      this.setData(this.data);
+      let el = document.getElementById(this.name);
+      this.onResize(el);
 
       document.addEventListener('click', (e) => {
-        this.lastColClick = null
-      })
+        this.lastColClick = null;
+      });
     },
     onColChange() {
-      this.isUnResize = false
-      const el = document.getElementById(this.name)
-      this.onResize(el)
+      this.isUnResize = false;
+      let el = document.getElementById(this.name);
+      this.onResize(el);
       setTimeout(() => {
-        this.genCustomSetting()
-      }, 100)
+        this.genCustomSetting();
+      }, 100);
     },
     columnHide(field) {
-      field.visible = false
-      this.onColChange()
+      field.visible = false;
+      this.onColChange();
     },
     onGridResponChange() {
       setTimeout(() => {
-        this.onColChange()
+        this.onColChange();
       })
     },
     onSelectedOnClick() {
       setTimeout(() => {
-        this.genCustomSetting()
-      }, 100)
+        this.genCustomSetting();
+      }, 100);
     },
     onShowFilter() {
-      this.showFilter = !this.showFilter
+      this.showFilter = !this.showFilter;
       setTimeout(() => {
         if (this.pinFields.length) {
           this.genPin()
         }
-        this.genCustomSetting()
-      }, 100)
+        this.genCustomSetting();
+      }, 100);
     },
     genCustomSetting() {
-      const fieldsCustom = []
+      let fieldsCustom = [];
       this.tableFields.forEach(c => {
-        const col = {}
-        col.name = c.name
-        col.visible = c.visible
-        col.pin = c.pin
+        let col = {};
+        col.name = c.name;
+        col.visible = c.visible;
+        col.pin = c.pin;
         if (Array.isArray(c.groups)) {
-          col.groups = []
+          col.groups = [];
           c.groups.forEach(g => {
-            const colg = {}
-            colg.name = g.name
-            colg.visible = g.visible
-            col.groups.push(colg)
-          })
+            let colg = {};
+            colg.name = g.name;
+            colg.visible = g.visible;
+            col.groups.push(colg);
+          });
         }
-        fieldsCustom.push(col)
-      })
+        fieldsCustom.push(col);
+      });
       this.customSetting = {
         fields: fieldsCustom,
         grid_responsive: this.grid_responsive,
         perPage: this.perPage,
         selectedOnClick: this.selectedOnClick,
         showFilter: this.showFilter
-      }
-      this.$localStorage.set(this.settingName, JSON.stringify(this.customSetting))
+      };
+      this.$localStorage.set(this.settingName, JSON.stringify(this.customSetting));
     },
     getWidth1(c) {
       if (c.width) {
-        c._width = c.width
+        c._width = c.width;
       } else {
-        let tmpc = c._title
+        let tmpc = c._title;
         if (tmpc) {
-          tmpc = !tmpc ? '' : tmpc + ''
-          tmpc = tmpc.replace(/[ิีืึุู์ฺํ๊๋่้็ัเไใ]*/g, '') // ิีืึุู์ฺํ๊๋่้็ัเไใ
+          tmpc = !tmpc ? '' : tmpc + '';
+          tmpc = tmpc.replace(/[ิีืึุู์ฺํ๊๋่้็ัเไใ]*/g, ''); //ิีืึุู์ฺํ๊๋่้็ัเไใ
         }
-        tmpc = (this.getLength(tmpc) + 5) * 8 // 7
+        tmpc = (this.getLength(tmpc) + 5) * 8; //7
 
-        c._width = !c._width ? 0 : c._width
+        c._width = !c._width ? 0 : c._width;
 
         if (tmpc > c._width) {
-          c._width = tmpc
+          c._width = tmpc;
         }
       }
     },
     getWidth2(c, r) {
       if (c.width) {
-        c._width = c.width
+        c._width = c.width;
       } else {
-        let tmpc = c._title
+        let tmpc = c._title;
         if (tmpc) {
-          tmpc = !tmpc ? '' : tmpc + ''
-          tmpc = tmpc.replace(/[ิีืึุู์ฺํ๊๋่้็ัเไใ]*/g, '') // ิีืึุู์ฺํ๊๋่้็ัเไใ
+          tmpc = !tmpc ? '' : tmpc + '';
+          tmpc = tmpc.replace(/[ิีืึุู์ฺํ๊๋่้็ัเไใ]*/g, ''); //ิีืึุู์ฺํ๊๋่้็ัเไใ
         }
-        tmpc = (this.getLength(tmpc) + 5) * 8 // 7
+        tmpc = (this.getLength(tmpc) + 5) * 8; //7
 
-        let tmpr = this.getCellView(c, r)
+        let tmpr = this.getCellView(c, r);
         if (tmpr) {
-          tmpr = !tmpr ? '' : tmpr + ''
-          tmpr = tmpr.replace(/.+>(.*)<.+/g, '$1')
-          tmpr = tmpr.replace(/[ิีืึุู์ฺํ๊๋่้็ัเไใ]*/g, '') // ิีืึุู์ฺํ๊๋่้็ัเไใ
+          tmpr = !tmpr ? '' : tmpr + '';
+          tmpr = tmpr.replace(/.+>(.*)<.+/g, '$1');
+          tmpr = tmpr.replace(/[ิีืึุู์ฺํ๊๋่้็ัเไใ]*/g, ''); //ิีืึุู์ฺํ๊๋่้็ัเไใ
         }
-        tmpr = (this.getLength(tmpr) + 5) * 8 // 7
+        tmpr = (this.getLength(tmpr) + 5) * 8; //7
 
-        c._width = !c._width ? 0 : c._width
+        c._width = !c._width ? 0 : c._width;
 
         if (tmpr > c._width || tmpc > c._width) {
-          c._width = Math.max(tmpr, tmpc)
+          c._width = Math.max(tmpr, tmpc);
         }
       }
     },
     onResize(el) {
       if (el) {
-        this.gridWidth = el.offsetWidth
+        this.gridWidth = el.offsetWidth;
       }
 
-      if (this.isUnResize) return
+      if (this.isUnResize) return;
 
       if (this.grid_responsive) {
-        this.isUnResize = true
+        this.isUnResize = true;
         this.tableFields.forEach(c => {
           if (c.visible || c.visible === undefined) {
             if (!c.o_col) {
               if (Array.isArray(c.groups)) {
                 if (c.width) {
-                  c._width = c.width
+                  c._width = c.width;
                 } else {
-                  this.getWidth1(c)
-                  let gWidth = 0
+                  this.getWidth1(c);
+                  let gWidth = 0;
                   c.groups.forEach(g => {
                     if (g.visible || g.visible === undefined) {
-                      this.getWidth1(g)
-                      gWidth += g._width
+                      this.getWidth1(g);
+                      gWidth += g._width;
                     }
-                  })
-                  c._width = c._width < gWidth ? gWidth : c._width
+                  });
+                  c._width = c._width < gWidth ? gWidth : c._width;
                 }
               } else {
-                this.getWidth1(c)
+                this.getWidth1(c);
               }
             }
           }
-        })
+        });
 
-        const show = true
-        this.col_viewmore = false
+        let show = true;
+        this.col_viewmore = false;
         this.tableFields.forEach((c, i) => {
           if (c.visible || c.visible === undefined) {
             if (!c.o_col) {
-              c._show = show
+              c._show = show;
             } else {
-              c._show = show
+              c._show = show;
             }
             if (Array.isArray(c.groups) && show) {
               c.groups.forEach(g => {
                 if (g.visible || g.visible === undefined) {
-                  g._show = show
+                  g._show = show;
                 }
-              })
+              });
             }
           }
-        })
-        this.tableFields = this.tableFields.slice()
+        });
+        this.tableFields = this.tableFields.slice();
       } else {
-        if (this.lastWidth == el.offsetWidth && !this.visibleData.length) return
-        this.lastWidth = el.offsetWidth
+        if (this.lastWidth == el.offsetWidth && !this.visibleData.length) return;
+        this.lastWidth = el.offsetWidth;
         if (this.visibleData.length) {
           this.visibleData.forEach(r => {
             this.tableFields.forEach(c => {
@@ -1281,79 +1281,79 @@ export default {
                 if (!c.o_col) {
                   if (Array.isArray(c.groups)) {
                     if (c.width) {
-                      c._width = c.width
+                      c._width = c.width;
                     } else {
-                      this.getWidth2(c)
-                      let gWidth = 0
+                      this.getWidth2(c);
+                      let gWidth = 0;
                       c.groups.forEach(g => {
                         if (g.visible || g.visible === undefined) {
-                          this.getWidth2(g, r)
-                          gWidth += g._width
+                          this.getWidth2(g, r);
+                          gWidth += g._width;
                         }
-                      })
-                      c._width = c._width < gWidth ? gWidth : c._width
+                      });
+                      c._width = c._width < gWidth ? gWidth : c._width;
                     }
                   } else {
-                    this.getWidth2(c, r)
+                    this.getWidth2(c, r);
                   }
                 }
               }
-            })
-          })
-        } else { /// no data
+            });
+          });
+        } else {  /// no data
           this.tableFields.forEach(c => {
             if (c.visible || c.visible === undefined) {
               if (!c.o_col) {
                 if (Array.isArray(c.groups)) {
                   if (c.width) {
-                    c._width = c.width
+                    c._width = c.width;
                   } else {
-                    c._width = 0
+                    c._width = 0;
                     c.groups.forEach(g => {
                       if (g.visible || g.visible === undefined) {
-                        this.getWidth1(g)
-                        c._width += g._width
+                        this.getWidth1(g);
+                        c._width += g._width;
                       }
-                    })
+                    });
                   }
                 } else {
-                  this.getWidth1(c)
+                  this.getWidth1(c);
                 }
               }
             }
-          })
+          });
         }
 
-        let wtmp = 0
-        let chkFirst = true
-        let show = true
-        this.col_viewmore = false
+        let wtmp = 0;
+        let chkFirst = true;
+        let show = true;
+        this.col_viewmore = false;
         this.tableFields.forEach((c, i) => {
           if (c.visible || c.visible === undefined) {
-            wtmp += c._width
-            // c.width = null;
+            wtmp += c._width;
+            //c.width = null;
             if (!this.grid_responsive) {
               if (wtmp >= el.offsetWidth) {
-                this.col_viewmore = true
-                show = false
+                this.col_viewmore = true;
+                show = false;
               }
             }
             if (!c.o_col && chkFirst) {
-              c._show = true
-              chkFirst = false
+              c._show = true;
+              chkFirst = false;
             } else {
-              c._show = show
+              c._show = show;
             }
             if (Array.isArray(c.groups) && show) {
               c.groups.forEach(g => {
                 if (g.visible || g.visible === undefined) {
-                  g._show = show
+                  g._show = show;
                 }
-              })
+              });
             }
           }
-        })
-        this.tableFields = this.tableFields.slice()
+        });
+        this.tableFields = this.tableFields.slice();
       }
       if (this.pinFields.length) {
         setTimeout(() => {
@@ -1362,180 +1362,182 @@ export default {
       }
     },
     getLength(val) {
-      return !val ? 0 : (val + '').length
+      return !val ? 0 : (val + "").length;
     },
     genTitle() {
       this.tableFields.forEach(c => {
         if (/^dic[.]*/.test(c.title)) {
-          c._title = this.GetObjVal(this.$i18n.messages[this.$i18n.locale], c.title)
+          c._title = this.GetObjVal(this.$i18n.messages, c.title);
         } else {
-          c._title = typeof c.title === 'function' ? c.title() : c.title
+          c._title = typeof c.title === "function" ? c.title() : c.title;
         }
         if (Array.isArray(c.groups)) {
           c.groups.forEach(g => {
             if (/^dic[.]*/.test(g.title)) {
-              g._title = this.GetObjVal(this.$i18n.messages[this.$i18n.locale], g.title)
+              g._title = this.GetObjVal(this.$i18n.messages, g.title);
             } else {
-              g._title = typeof g.title === 'function' ? g.title() : g.title
+              g._title = typeof g.title === "function" ? g.title() : g.title;
             }
-          })
+          });
         }
-      })
+      });
     },
     getGroupsLength(field) {
       if (Array.isArray(field.groups)) {
-        return field.groups.filter(x => x.visible).length
+        return field.groups.filter(x => x.visible).length;
       }
-      return 0
+      return 0;
     },
     IsShowGroups() {
-      return this.tableFields.find(c => Array.isArray(c.groups) && c._show)
+      return this.tableFields.find(c => Array.isArray(c.groups) && c._show);
     },
-    // -------------------- view ---------------------//
+    //-------------------- view ---------------------//
     getTitle(field) {
-      const title = typeof field.title === 'function' ? field.title() : field._title
-      return !title ? '' : title
+      let title = typeof field.title === "function" ? field.title() : field._title;
+      return !title ? "" : title;
     },
     renderTitle(field) {
-      const title = this.getTitle(field)
-      return title
+      let title = this.getTitle(field);
+      return title;
     },
     renderTitleGroup(field, fieldd) {
-      const title = this.getTitle(field) + ' ' + this.getTitle(fieldd)
-      return title
+      let title = this.getTitle(field) + ' ' + this.getTitle(fieldd);
+      return title;
     },
 
-    // ---------------- sort ------------------//
+    //---------------- sort ------------------//
     isSortable(field) {
-      return !(typeof field.sortField === 'undefined')
+      return !(typeof field.sortField === "undefined");
     },
     orderBy(field, direction) {
-      if (!this.isSortable(field)) return
+      if (!this.isSortable(field)) return;
 
-      this.sortOrder = []
+      this.sortOrder = [];
       if (field._direction != direction) {
         this.sortOrder.push({
           field: field.name,
           sortField: field.sortField,
           direction: direction
-        })
-        field._direction = direction
+        });
+        field._direction = direction;
       } else {
-        field._direction = ''
+        field._direction = '';
       }
-      this.sortData()
+      this.sortData();
     },
     getDirection(d) {
-      return d === 'asc' ? '>' : '<'
+      return d === "asc" ? ">" : "<";
     },
     sortData(noneReset = false) {
       if (this.sortOrder.length) {
-        let str = ''
+        let str = "";
         this.sortOrder.forEach((x, i) => {
           if (i == this.sortOrder.length - 1) {
-            str += 'a.' + x.sortField + ' ' + this.getDirection(x.direction) + ' b.' + x.sortField + ' ? 1 '
+            str += "a." + x.sortField + " " + this.getDirection(x.direction) + " b." + x.sortField + " ? 1 ";
             if (this.sortOrder.length == 1) {
-              str += ': a.' + x.sortField + ' == ' + 'b.' + x.sortField + ' ? 0 '
+              str += ": a." + x.sortField + " == " + "b." + x.sortField + " ? 0 ";
             }
             for (let j = 0; j < i + 1; j++) {
-              str += ': -1 '
+              str += ": -1 ";
             }
           } else {
-            str += 'a.' + x.sortField + ' ' + this.getDirection(x.direction) + ' b.' + x.sortField + ' ? 1 : ' + 'a.' + x.sortField + ' === b.' + x.sortField + ' ? '
+            str += "a." + x.sortField + " " + this.getDirection(x.direction) + " b." + x.sortField + " ? 1 : " + "a." + x.sortField + " === b." + x.sortField + " ? ";
           }
-        })
+        });
         try {
-          const sort = eval('(a, b) => { return ' + str + ' }')
-          this.tableData = this.tableData.slice().sort(sort)
+          let sort = eval("(a, b) => { return " + str + " }");
+          this.tableData = this.tableData.slice().sort(sort);
         } catch (ex) { }
       } else {
-        if (!noneReset) this.setData(this.data)
+        if (!noneReset) this.setData(this.data);
       }
-      this.setVisibleData()
+      this.setVisibleData();
     },
 
-    // --------------------- data ------------------//
+    //--------------------- data ------------------//
     refresh() {
-      this.selectedTo = []
-      this.setData(this.data)
-      this.onColChange()
+      this.selectedTo = [];
+      this.setData(this.data);
+      this.onColChange();
     },
     render() {
-      this.selectedTo = []
-      this.onColChange()
+      this.selectedTo = [];
+      this.onColChange();
     },
     reset() {
-      this.selectedTo = []
-      this.onRender()
+      this.selectedTo = [];
+      this.onRender();
     },
     setData(data) {
-      if (data === null || typeof data === 'undefined') return
-      this.tableData = []
-      this.visibleData = []
-      // this.selectedTo = [];
-      this.lastRowClick = {}
+      if (data === null || typeof data === "undefined") return;
+      this.tableData = [];
+      this.visibleData = [];
+      //this.selectedTo = [];
+      this.lastRowClick = {};
       if (Array.isArray(data)) {
         data.forEach((x, i) => {
-          x._selected = false
-          let chk = true
+          x._selected = false;
+          let chk = true;
           if (this.showFilter || this.o_footer_visible) {
             this.tableFields.forEach(y => {
               if (Array.isArray(y.groups)) {
                 y.groups.forEach(g => {
                   if (g.filterTerm && g.txtFilter) {
                     if (!(g.filterTerm.test(this.GetObjVal(x, g.name, '')) || g.txtFilter == this.GetObjVal(x, g.name, ''))) {
-                      chk = false
+                      chk = false;
                     }
                   }
 
                   if (this.o_footer_visible) {
                     if (!IsNull(g.footer)) {
-                      this.setFooter(g, x, !i)
+                      this.setFooter(g, x, !i);
                     }
                   }
-                })
+                });
               } else {
                 if (y.filterTerm && y.txtFilter) {
                   if (!(y.filterTerm.test(this.GetObjVal(x, y.name, '')) || y.txtFilter == this.GetObjVal(x, y.name, ''))) {
-                    chk = false
+                    chk = false;
                   }
                 }
 
                 if (this.o_footer_visible) {
                   if (!IsNull(y.footer)) {
-                    this.setFooter(y, x, !i)
+                    this.setFooter(y, x, !i);
                   }
                 }
               }
-            })
+            });
           }
           if (chk) {
             if (this.statusData.length > 0) {
-              if (this.statusData.find(y => y.value == x.status)) this.tableData.push(x)
-            } else this.tableData.push(x)
+              if (this.statusData.find(y => y.value == x.status)) this.tableData.push(x);
+            }
+            else this.tableData.push(x);
           }
-        })
-        this.sortData(true)
-        this.makePagination()
+        });
+        this.sortData(true);
+        this.makePagination();
+        return;
       }
     },
     setVisibleData() {
-      if (IsNull(this.perPage) || !this.perPage) this.perPage = this.tableData.length < 10 ? 10 : 1000000
-      this.startRow = this.perPage * (this.currentPage - 1)
-      this.stopRow = (this.perPage * this.currentPage) - 1
+      if (IsNull(this.perPage) || !this.perPage) this.perPage = this.tableData.length < 10 ? 10 : 1000000;
+      this.startRow = this.perPage * (this.currentPage - 1);
+      this.stopRow = (this.perPage * this.currentPage) - 1;
 
-      this.visibleData = []
+      this.visibleData = [];
       this.tableData.forEach((x, i) => {
         if (i >= this.startRow && i <= this.stopRow) {
-          x._viewmore = false
-          this.visibleData.push(x)
+          x._viewmore = false;
+          this.visibleData.push(x);
         }
-      })
+      });
 
       if (this.tableData.length > 0 && !this.visibleData.length) {
-        this.currentPage = 1
-        this.setVisibleData()
-        return
+        this.currentPage = 1;
+        this.setVisibleData();
+        return;
       }
 
       if (this.pinFields.length) {
@@ -1545,164 +1547,165 @@ export default {
       }
     },
     hasCallback(item) {
-      return !!item.callback
+      return item.callback ? true : false;
     },
     callCallback(field, item) {
-      if (typeof field.callback == 'function') {
-        return field.callback(this.GetObjVal(item, field.name))
+      if (typeof field.callback == "function") {
+        return field.callback(this.GetObjVal(item, field.name));
       }
-      return this.GetObjVal(item, field.callback, '')
+      return this.GetObjVal(item, field.callback, '');
     },
     getCellView(field, item) {
       if (field.callback) {
-        return this.callCallback(field, item)
-      } else {
-        return this.GetObjVal(item, field.name, '')
+        return this.callCallback(field, item);
+      }
+      else {
+        return this.GetObjVal(item, field.name, '');
       }
     },
     getTooltip(field, item) {
-      if (typeof field.tooltip == 'function') {
-        return field.tooltip(item)
+      if (typeof field.tooltip == "function") {
+        return field.tooltip(item);
       } else {
-        return field.tooltip
+        return field.tooltip;
       }
     },
     getCellFooter(field) {
       if (!IsNull(GetObjVal(field, 'footer'))) {
-        if (typeof field.callback == 'function') {
-          return field.callback(field.footer.value)
+        if (typeof field.callback == "function") {
+          return field.callback(field.footer.value);
         }
-        return field.footer.value
+        return field.footer.value;
       }
-      return null
+      return null;
     },
     setFooter(field, item, reset) {
       if (field.footer.type == aggregationTypes.sum) {
-        if (reset) field.footer.value = 0
+        if (reset) field.footer.value = 0;
         if (typeof field.footer.formula == 'function') {
-          field.footer.value += field.footer.formula(item)
+          field.footer.value += field.footer.formula(item);
         } else {
-          field.footer.value += Number(GetObjVal(item, field.name, 0))
+          field.footer.value += Number(GetObjVal(item, field.name, 0));
         }
-        field.footer.value = IsNull(GetObjVal(field.footer, 'decimal')) ? field.footer.value : Round(field.footer.value, field.footer.decimal)
+        field.footer.value = IsNull(GetObjVal(field.footer, 'decimal')) ? field.footer.value : Round(field.footer.value, field.footer.decimal);
       } else if (field.footer.type == aggregationTypes.percent) {
         if (reset) {
-          field.footer.multi.value = 0
-          field.footer.divi.value = 0
-          field.footer.value = 0
+          field.footer.multi.value = 0;
+          field.footer.divi.value = 0;
+          field.footer.value = 0;
         }
         if (typeof field.footer.formula == 'function') {
-          field.footer.value += field.footer.formula(item, field)
+          field.footer.value += field.footer.formula(item, field);
         } else {
-          field.footer.multi.value += Number(GetObjVal(item, field.footer.multi.field, 0))
-          field.footer.divi.value += Number(GetObjVal(item, field.footer.divi.field, 0))
-          field.footer.value = field.footer.divi.value > 0 ? (field.footer.multi.value / field.footer.divi.value) * 100 : 0
+          field.footer.multi.value += Number(GetObjVal(item, field.footer.multi.field, 0));
+          field.footer.divi.value += Number(GetObjVal(item, field.footer.divi.field, 0));
+          field.footer.value = field.footer.divi.value > 0 ? (field.footer.multi.value / field.footer.divi.value) * 100 : 0;
         }
-        field.footer.value = IsNull(GetObjVal(field.footer, 'decimal')) ? field.footer.value : Round(field.footer.value, field.footer.decimal)
+        field.footer.value = IsNull(GetObjVal(field.footer, 'decimal')) ? field.footer.value : Round(field.footer.value, field.footer.decimal);
       } else if (field.footer.type == aggregationTypes.avg) {
         if (reset) {
-          field.footer.multi.value = 0
-          field.footer.divi.value = 0
-          field.footer.value = 0
+          field.footer.multi.value = 0;
+          field.footer.divi.value = 0;
+          field.footer.value = 0;
         }
-        field.footer.multi.value += Number(GetObjVal(item, field.footer.multi.field, 0))
-        field.footer.divi.value += Number(GetObjVal(item, field.footer.divi.field, 0))
+        field.footer.multi.value += Number(GetObjVal(item, field.footer.multi.field, 0));
+        field.footer.divi.value += Number(GetObjVal(item, field.footer.divi.field, 0));
         if (!IsNull(GetObjVal(field.footer, 'decimal'))) {
-          field.footer.multi.value = Round(field.footer.multi.value, field.footer.decimal)
-          field.footer.divi.value = Round(field.footer.divi.value, field.footer.decimal)
+          field.footer.multi.value = Round(field.footer.multi.value, field.footer.decimal);
+          field.footer.divi.value = Round(field.footer.divi.value, field.footer.decimal);
         }
-        field.footer.value = field.footer.divi.value > 0 ? field.footer.multi.value / field.footer.divi.value : 0
-        field.footer.value = IsNull(GetObjVal(field.footer, 'decimal')) ? field.footer.value : Round(field.footer.value, field.footer.decimal)
+        field.footer.value = field.footer.divi.value > 0 ? field.footer.multi.value / field.footer.divi.value : 0;
+        field.footer.value = IsNull(GetObjVal(field.footer, 'decimal')) ? field.footer.value : Round(field.footer.value, field.footer.decimal);
       } else if (field.footer.type == aggregationTypes.currency) {
         if (reset) {
-          field.footer.value = []
+          field.footer.value = [];
         }
         if (GetObjVal(item, field.name + '.length')) {
           GetObjVal(item, field.name).forEach(n => {
-            let tmp = field.footer.value.find(x => x.symbol == n.symbol)
+            let tmp = field.footer.value.find(x => x.symbol == n.symbol);
             if (!tmp) {
-              tmp = ObjCopy(n)
-              tmp.amount = 0
-              field.footer.value.push(tmp)
+              tmp = ObjCopy(n);
+              tmp.amount = 0;
+              field.footer.value.push(tmp);
             }
-            tmp.amount += Number(n.amount)
-            tmp.amount = IsNull(GetObjVal(field.footer, 'decimal')) ? tmp.amount : Round(tmp.amount, field.footer.decimal)
-          })
+            tmp.amount += Number(n.amount);
+            tmp.amount = IsNull(GetObjVal(field.footer, 'decimal')) ? tmp.amount : Round(tmp.amount, field.footer.decimal);
+          });
         }
       }
     },
     normalizeSortOrder() {
       this.sortOrder.forEach((item) => {
-        item.sortField = item.sortField || item.field
-      })
+        item.sortField = item.sortField || item.field;
+      });
     },
 
-    // ------------------------ filter ------------------------//
+    //------------------------ filter ------------------------//
     filterClick(e) {
-      e.stopPropagation()
-      this.filterChange()
+      e.stopPropagation();
+      this.filterChange();
     },
     filterChange(e) {
       this.tableFields.forEach(f => {
         if (Array.isArray(f.groups)) {
           f.groups.forEach(g => {
             if (this.GetObjVal(f, 'filter') !== false) {
-              g.filterTerm = this.GetObjVal(g, 'txtFilter', '')
+              g.filterTerm = this.GetObjVal(g, 'txtFilter', '');
               if (typeof (g.filterTerm) === 'string') {
-                g.filterTerm = g.filterTerm.trim()
+                g.filterTerm = g.filterTerm.trim();
               }
               if (g.filterTerm) {
-                g.filterTerm = g.filterTerm.replace(/[%]/g, '*') /* SoMRuk */
-                g.filterTerm = g.filterTerm.replace(/([!@#$%\^&)(+=._-])/g, '[$1]') /* SoMRuk */
-                g.filterTerm += '*' /* SoMRuk */
-                var reText = g.filterTerm.replace(/(\\)?\*/g, function ($0, $1) { return $1 ? $0 : '[\\s\\S]*?' })
-                g.filterTerm = new RegExp('^' + reText + '$', 'i')
+                g.filterTerm = g.filterTerm.replace(/[%]/g, '*'); /*SoMRuk*/
+                g.filterTerm = g.filterTerm.replace(/([!@#$%\^&)(+=._-])/g, '[$1]'); /*SoMRuk*/
+                g.filterTerm += '*'; /*SoMRuk*/
+                var reText = g.filterTerm.replace(/(\\)?\*/g, function ($0, $1) { return $1 ? $0 : '[\\s\\S]*?'; });
+                g.filterTerm = new RegExp('^' + reText + '$', 'i');
               }
             }
-          })
+          });
         } else {
           if (this.GetObjVal(f, 'filter') !== false) {
-            f.filterTerm = this.GetObjVal(f, 'txtFilter', '')
+            f.filterTerm = this.GetObjVal(f, 'txtFilter', '');
             if (typeof (f.filterTerm) === 'string') {
-              f.filterTerm = f.filterTerm.trim()
+              f.filterTerm = f.filterTerm.trim();
             }
             if (f.filterTerm) {
-              f.filterTerm = f.filterTerm.replace(/[%]/g, '*') /* SoMRuk */
-              f.filterTerm = f.filterTerm.replace(/([!@#$%\^&)(+=._-])/g, '[$1]') /* SoMRuk */
-              f.filterTerm += '*' /* SoMRuk */
-              var reText = f.filterTerm.replace(/(\\)?\*/g, function ($0, $1) { return $1 ? $0 : '[\\s\\S]*?' })
-              f.filterTerm = new RegExp('^' + reText + '$', 'i')
+              f.filterTerm = f.filterTerm.replace(/[%]/g, '*'); /*SoMRuk*/
+              f.filterTerm = f.filterTerm.replace(/([!@#$%\^&)(+=._-])/g, '[$1]'); /*SoMRuk*/
+              f.filterTerm += '*'; /*SoMRuk*/
+              var reText = f.filterTerm.replace(/(\\)?\*/g, function ($0, $1) { return $1 ? $0 : '[\\s\\S]*?'; });
+              f.filterTerm = new RegExp('^' + reText + '$', 'i');
             }
           }
         }
-      })
-      setTimeout(() => { this.setData(this.data) }, 1)
+      });
+      setTimeout(() => { this.setData(this.data); }, 1);
     },
 
-    // ------------------------ pagination ------------------------//
+    //------------------------ pagination ------------------------//
     makePagination() {
-      this.totalPage = []
+      this.totalPage = [];
       for (
         let i = 0;
         i < Math.ceil(this.tableData.length / this.perPage);
         i++
       ) {
-        this.totalPage.push(i + 1)
+        this.totalPage.push(i + 1);
       }
     },
     nextPage() {
-      this.currentPage += 1
-      this.setVisibleData()
+      this.currentPage += 1;
+      this.setVisibleData();
     },
     previousPage() {
-      this.currentPage -= 1
-      this.setVisibleData()
+      this.currentPage -= 1;
+      this.setVisibleData();
     },
     PerPageChange() {
-      this.currentPage = 1
-      this.setVisibleData()
-      this.makePagination()
-      this.genCustomSetting()
+      this.currentPage = 1;
+      this.setVisibleData();
+      this.makePagination();
+      this.genCustomSetting();
     },
     // getNo(index) {
     //   if (index == 0) this.countIndex = 0;
@@ -1710,28 +1713,28 @@ export default {
     //   return this.countIndex + (this.perPage * (this.currentPage - 1))
     // },
     firstPage() {
-      this.currentPage = 1
-      this.setVisibleData()
+      this.currentPage = 1;
+      this.setVisibleData();
     },
     lastPage() {
-      this.currentPage = this.totalPage[this.totalPage.length - 1]
-      this.setVisibleData()
+      this.currentPage = this.totalPage[this.totalPage.length - 1];
+      this.setVisibleData();
     },
 
-    // ------------------------- view more -------------------------//
+    //------------------------- view more -------------------------//
     rowViewMoreActive(dataItem) {
-      return dataItem._viewmore
+      return dataItem["_viewmore"];
     },
 
-    // ------------------------- select ----------------------------//
+    //------------------------- select ----------------------------//
     toggleClick(index, event) {
-      if (event.shiftKey) {
-        const lastIndex = this.getIndexLastRow()
-        if (lastIndex == -1) return
+      if (event['shiftKey']) {
+        let lastIndex = this.getIndexLastRow();
+        if (lastIndex == -1) return;
         if (this.rowSelected(this.visibleData[lastIndex])) {
           if (index > lastIndex) {
             for (let i = index; i >= lastIndex; i--) {
-              this.toggleCheckbox(this.visibleData[i], true)
+              this.toggleCheckbox(this.visibleData[i], true);
             }
           } else {
             for (let i = index; i <= lastIndex; i++) {
@@ -1739,502 +1742,504 @@ export default {
             }
           }
         }
-        this.toggleCheckbox(this.visibleData[index], this.rowSelected(this.visibleData[index]))
+        this.toggleCheckbox(this.visibleData[index], this.rowSelected(this.visibleData[index]));
       } else {
-        this.toggleCheckbox(this.visibleData[index], !this.rowSelected(this.visibleData[index]))
+        this.toggleCheckbox(this.visibleData[index], !this.rowSelected(this.visibleData[index]));
       }
     },
     toggleCheckbox(item, checked) {
       if (item[this.trackBy] === undefined) {
-        return
+        return;
       }
-      const key = item[this.trackBy]
+      let key = item[this.trackBy];
       if (checked) {
-        this.selectId(key)
+        this.selectId(key);
       } else {
-        this.unselectId(key)
+        this.unselectId(key);
       }
       // set last click
-      this.onRowClicked(item)
-      this.$emit(this.eventPrefix + 'rowToggleSelected', this.rowSelected(item), this.name)
-      this.$emit(this.eventPrefix + 'rowSelected', this.rowSelected(item), this.name)
+      this.onRowClicked(item);
+      this.$emit(this.eventPrefix + "rowToggleSelected", this.rowSelected(item), this.name);
+      this.$emit(this.eventPrefix + "rowSelected", this.rowSelected(item), this.name);
     },
     selectId(key) {
       if (this.o_select_single) {
-        this.unselectAll()
+        this.unselectAll();
       }
       if (!this.isSelectedRow(key)) {
-        this.selectedTo.push(key)
+        this.selectedTo.push(key);
       }
     },
     unselectId(key) {
-      this.selectedTo.splice(this.selectedTo.indexOf(key), 1)
+      this.selectedTo.splice(this.selectedTo.indexOf(key), 1);
     },
     unselectAll() {
-      this.selectedTo = []
+      this.selectedTo = [];
     },
     isSelectedRow(key) {
-      return this.selectedTo.indexOf(key) >= 0
+      return this.selectedTo.indexOf(key) >= 0;
     },
     rowSelected(dataItem) {
-      const key = this.GetObjVal(dataItem, this.trackBy)
-      return this.isSelectedRow(key)
+      let key = this.GetObjVal(dataItem, this.trackBy);
+      return this.isSelectedRow(key);
     },
     rowSelectedClass(dataItem) {
-      const key = this.GetObjVal(dataItem, this.trackBy)
-      return this.isSelectedRow(key)
+      let key = this.GetObjVal(dataItem, this.trackBy);
+      return this.isSelectedRow(key);
     },
     rowLastClick(dataItem) {
-      return this.lastRowClick[this.trackBy] == dataItem[this.trackBy]
+      return this.lastRowClick[this.trackBy] == dataItem[this.trackBy];
     },
     getIndexLastRow() {
-      return this.visibleData.indexOf(this.lastRowClick)
+      return this.visibleData.indexOf(this.lastRowClick);
     },
     toggleAllCheckboxes(checked) {
       if (checked) {
-        this.selectedTo = [...this.tableData.map(x => x[this.trackBy])]
+        this.selectedTo = [...this.tableData.map(x => x[this.trackBy])];
       } else {
-        this.unselectAll()
+        this.unselectAll();
       }
-      this.$emit(this.eventPrefix + 'rowToggleSelectedAll', checked, this.name)
-      this.$emit(this.eventPrefix + 'rowSelected', checked, this.name)
+      this.$emit(this.eventPrefix + "rowToggleSelectedAll", checked, this.name);
+      this.$emit(this.eventPrefix + "rowSelected", checked, this.name);
     },
     getSelectedCount() {
-      return this.selectedTo.length
+      return this.selectedTo.length;
     },
     getSelected() {
       return this.data.filter(item => {
-        return this.selectedTo.indexOf(item[this.trackBy]) >= 0
-      })
+        return this.selectedTo.indexOf(item[this.trackBy]) >= 0;
+      });
     },
     onSelected() {
       if (this.selectedTo.length) {
-        this.d_btnClone = this.d_btnView = this.selectedTo.length > 1
-        this.d_btnEdit = this.o_mode_multiEdit ? false : this.selectedTo.length > 1
-        this.d_btnDelete = false
+        this.d_btnClone = this.d_btnView = this.selectedTo.length > 1;
+        this.d_btnEdit = this.o_mode_multiEdit ? false : this.selectedTo.length > 1;
+        this.d_btnDelete = false;
 
         if (this.GetObjVal(this.data[this.data.length - 1], 'status')) {
           if (this.data.find(item => this.selectedTo.indexOf(item[this.trackBy]) >= 0 && item.status == 'C')) {
-            this.d_btnDelete = this.d_btnEdit = true
+            this.d_btnDelete = this.d_btnEdit = true;
           }
         }
       } else {
-        this.d_btnDelete = this.d_btnEdit = this.d_btnClone = this.d_btnView = true
+        this.d_btnDelete = this.d_btnEdit = this.d_btnClone = this.d_btnView = true;
       }
     },
 
-    // ---------------------------- on click ----------------------------//
+    //---------------------------- on click ----------------------------//
     isCellClick(item, field) {
       if (this.GetObjVal(field, 'cellEdit')) {
         if (this.GetObjVal(this.lastRowClick, this.trackBy) == item[this.trackBy]) {
           if (this.GetObjVal(this.lastColClick, 'name') == field.name) {
-            return true
+            return true;
           }
         }
       }
-      return false
+      return false;
     },
     isInvalid(item, field) {
-      return this.GetObjVal(item, '_validation.' + field.name + '.$invalid') === true
+      return this.GetObjVal(item, '_validation.' + field.name + '.$invalid') === true;
     },
     onCellEdit(item, field, value) {
       if (this.GetObjVal(field, 'cellEdit') === true) {
         if (this.GetObjVal(item, field.name) != value) {
-          this.SetObjVal(item, field.name, value)
-          this.$emit(this.eventPrefix + 'onCellEditChanged', item, field, value, this.name)
+          this.SetObjVal(item, field.name, value);
+          this.$emit(this.eventPrefix + "onCellEditChanged", item, field, value, this.name);
         }
-        // change
+        //change
         // this.$emit(this.eventPrefix + "onCellEditChanged", item, field, value, this.name);
       }
       if (this.GetObjVal(this.lastColClick, 'name') == field.name && this.GetObjVal(this.lastRowClick, this.trackBy) == item[this.trackBy]) {
-        this.lastColClick = null
+        this.lastColClick = null;
       }
     },
     onCellEditBlur(item, field, event) {
-      this.$emit(this.eventPrefix + 'onCellEditBlur', item, field, this.name)
+      this.$emit(this.eventPrefix + "onCellEditBlur", item, field, this.name);
     },
     onCellFocus(item, field, event, id) {
-      this.currCell = id
-      this.$emit(this.eventPrefix + 'onCellClicked', item, field, this.name)
-      this.onRowClicked(item, field, event)
+      this.currCell = id;
+      this.$emit(this.eventPrefix + "onCellClicked", item, field, this.name);
+      this.onRowClicked(item, field, event);
     },
     onCellClicked(item, field, event, id) {
-      this.currCell = id
-      this.$emit(this.eventPrefix + 'onCellClicked', item, field, this.name)
-      this.onRowClicked(item, field, event)
+      this.currCell = id;
+      this.$emit(this.eventPrefix + "onCellClicked", item, field, this.name);
+      this.onRowClicked(item, field, event);
     },
     onRowClicked(item, field, event) {
       if (event) {
-        event.stopPropagation()
+        event.stopPropagation();
         if (this.o_col_checkbox && this.selectedOnClick) {
-          this.unselectAll()
-          this.selectId(item[this.trackBy])
-          this.$emit(this.eventPrefix + 'rowSelected', this.rowSelected(item), this.name)
+          this.unselectAll();
+          this.selectId(item[this.trackBy]);
+          this.$emit(this.eventPrefix + "rowSelected", this.rowSelected(item), this.name);
         }
       }
       if (this.GetObjVal(this.lastRowClick, this.trackBy) != item[this.trackBy] || this.GetObjVal(this.lastColClick, 'name') != this.GetObjVal(field, 'name')) {
         if (field && item && GetObjVal(event, 'type') == 'click' && (!GetObjVal(field, 'dblClickEdit') || GetObjVal(event, 'detail') == 2 || GetObjVal(event, 'detail') == 0)) {
           if (field.cellEdit) {
-            this.$emit(this.eventPrefix + 'onCellEditClicked', item, field, this.name)
-            field.input.value = this.GetObjVal(item, field.name)
+            this.$emit(this.eventPrefix + "onCellEditClicked", item, field, this.name);
+            field.input.value = this.GetObjVal(item, field.name);
           }
-          this.lastColClick = field
+          this.lastColClick = field;
         } else {
-          this.lastColClick = null
+          this.lastColClick = null;
         }
       }
       if (this.GetObjVal(this.lastRowClick, this.trackBy) != item[this.trackBy]) {
-        this.lastRowClick = item
-        this.$emit(this.eventPrefix + 'rowClicked', item, this.rowSelected(item), this.name)
+        this.lastRowClick = item;
+        this.$emit(this.eventPrefix + "rowClicked", item, this.rowSelected(item), this.name);
       }
     },
     onViewMore(dataItem, index, e) {
       if (!dataItem._viewmore) {
-        const tmp = JSON.parse(JSON.stringify(dataItem))
-        tmp._opt = true
-        this.visibleData.splice(index + 1, 0, tmp)
+        let tmp = JSON.parse(JSON.stringify(dataItem));
+        tmp._opt = true;
+        this.visibleData.splice(index + 1, 0, tmp);
       } else {
-        this.visibleData.splice(index + 1, 1)
+        this.visibleData.splice(index + 1, 1);
       }
-      dataItem._viewmore = !dataItem._viewmore
+      dataItem._viewmore = !dataItem._viewmore;
     },
     onAddClick() {
-      this.$emit(this.eventPrefix + 'btnClick', 'Add', [], this.name)
+      this.$emit(this.eventPrefix + "btnClick", "Add", [], this.name);
     },
     onCloneClick() {
-      const data = this.getSelected()
-      this.$emit(this.eventPrefix + 'btnClick', 'Clone', data, this.name)
+      let data = this.getSelected();
+      this.$emit(this.eventPrefix + "btnClick", "Clone", data, this.name);
     },
     onViewClick() {
-      const data = this.getSelected()
-      this.$emit(this.eventPrefix + 'btnClick', 'View', data, this.name)
+      let data = this.getSelected();
+      this.$emit(this.eventPrefix + "btnClick", "View", data, this.name);
     },
     onEditClick() {
-      const data = this.getSelected()
-      this.$emit(this.eventPrefix + 'btnClick', 'Edit', data, this.name)
+      let data = this.getSelected();
+      this.$emit(this.eventPrefix + "btnClick", "Edit", data, this.name);
     },
     onDeleteClick() {
-      const data = this.getSelected()
-      this.$emit(this.eventPrefix + 'btnClick', 'Delete', data, this.name)
+      let data = this.getSelected();
+      this.$emit(this.eventPrefix + "btnClick", "Delete", data, this.name);
     },
     onRowMove(e) {
-      this.$emit(this.eventPrefix + 'rowMove', e.moved, this.visibleData)
+      this.$emit(this.eventPrefix + "rowMove", e.moved, this.visibleData);
     },
     onFieldMove(e) {
-      // console.log(e);
-      this.genCustomSetting()
+      //console.log(e);
+      this.genCustomSetting();
     },
 
-    /// ////------------------------------------------ text color ---------------------------------------------------//////
+    ///////------------------------------------------ text color ---------------------------------------------------//////
     getTextColor(dataItem) {
-      let color = this.GetObjVal(dataItem, 'textColor', '')
+      let color = this.GetObjVal(dataItem, 'textColor', '');
       if (this.GetObjVal(this.tableData[this.tableData.length - 1], 'status')) {
-        if (dataItem.status == 'I') color = 'primary'
-        else if (dataItem.status == 'C') color = 'danger'
+        if (dataItem.status == 'I') color = 'primary';
+        else if (dataItem.status == 'C') color = 'danger';
       }
-      return 'text-' + color
+      return 'text-' + color;
     },
 
-    /// ////------------------------------------------ export excel ---------------------------------------------------//////
+    ///////------------------------------------------ export excel ---------------------------------------------------//////
 
     CreateHeader(worksheet) {
-      let currentRow = 0
+      let currentRow = 0;
       this.o_export_header.forEach(c => {
-        currentRow++
-        worksheet.addRows([[c]])
-      })
+        currentRow++;
+        worksheet.addRows([[c]]);
+      });
 
-      let head1 = []; let head2 = []; let colGroup = false
+      let head1 = [], head2 = [], colGroup = false;
       this.fields.forEach(c => {
         if (c.visible) {
           if (Array.isArray(c.groups)) {
             c.groups.filter(g => g.visible).forEach((g, i) => {
-              if (!i) head1.push(c._title)
-              else head1.push(null)
-              head2.push(g._title)
-              colGroup = true
-            })
+              if (!i) head1.push(c._title);
+              else head1.push(null);
+              head2.push(g._title);
+              colGroup = true;
+            });
           } else {
-            head1.push(c._title)
-            head2.push(null)
+            head1.push(c._title);
+            head2.push(null);
           }
         }
-      })
+      });
 
-      // worksheet.getRow(1).values = head1;
-      currentRow++
-      worksheet.addRows([head1])
+      //worksheet.getRow(1).values = head1;
+      currentRow++;
+      worksheet.addRows([head1]);
 
-      head1 = worksheet.getRow(currentRow)
+      head1 = worksheet.getRow(currentRow);
       head1.font = {
-        name: 'Tahoma',
+        name: "Tahoma",
         size: 11,
         bold: true,
-        color: { argb: '80000000' }
-      }
-      head1.alignment = { vertical: 'middle', horizontal: 'center' }
-      head1.height = 20
+        color: { argb: "80000000" }
+      };
+      head1.alignment = { vertical: "middle", horizontal: "center" };
+      head1.height = 20;
 
       if (colGroup) {
-        let idf = 0; let idl = 0
-        currentRow++
-        worksheet.addRows([head2])
+        let idf = 0, idl = 0;
+        currentRow++;
+        worksheet.addRows([head2]);
         this.fields.forEach(c => {
           if (c.visible) {
             if (Array.isArray(c.groups)) {
-              let chk = false
+              let chk = false;
               c.groups.filter(g => g.visible).forEach((g, i) => {
                 if (!i) {
-                  idf++; idl++
-                } else idl++
-                head2.push(g._title)
-                colGroup = true
-                chk = true
-              })
+                  idf++; idl++;
+                }
+                else idl++;
+                head2.push(g._title);
+                colGroup = true;
+                chk = true;
+              });
               if (chk) {
-                worksheet.mergeCells(currentRow - 1, idf, currentRow - 1, idl)
+                worksheet.mergeCells(currentRow - 1, idf, currentRow - 1, idl);
               }
-              idf = idl
+              idf = idl;
             } else {
-              idf++; idl++
-              worksheet.mergeCells(currentRow - 1, idf, currentRow, idl)
+              idf++; idl++;
+              worksheet.mergeCells(currentRow - 1, idf, currentRow, idl);
             }
           }
-        })
+        });
 
-        head2 = worksheet.getRow(currentRow)
+        head2 = worksheet.getRow(currentRow);
         head2.font = {
-          name: 'Tahoma',
+          name: "Tahoma",
           size: 11,
           bold: true,
-          color: { argb: '80000000' }
-        }
-        head2.alignment = { vertical: 'middle', horizontal: 'center' }
-        head2.height = 20
+          color: { argb: "80000000" }
+        };
+        head2.alignment = { vertical: "middle", horizontal: "center" };
+        head2.height = 20;
       }
     },
     getDataExcel(r) {
-      const row = []
+      let row = [];
       this.fields.forEach(c => {
         if (c.visible) {
           if (Array.isArray(c.groups)) {
             c.groups.filter(g => g.visible).forEach(g => {
-              let tmpr = this.getCellView(g, r)
-              tmpr = !tmpr ? '' : tmpr + ''
-              tmpr = tmpr.replace(/.+>(.*)<.+/g, '$1')
-              if (!tmpr || isFinite(tmpr.replace(',', ''))) tmpr = this.GetObjVal(r, g.name, '')
-              row.push(tmpr)
-            })
+              let tmpr = this.getCellView(g, r);
+              tmpr = !tmpr ? '' : tmpr + '';
+              tmpr = tmpr.replace(/.+>(.*)<.+/g, '$1');
+              if (!tmpr || isFinite(tmpr.replace(',', ''))) tmpr = this.GetObjVal(r, g.name, '');
+              row.push(tmpr);
+            });
           } else {
-            let tmpr = this.getCellView(c, r)
-            tmpr = !tmpr ? '' : tmpr + ''
-            tmpr = tmpr.replace(/.+>(.*)<.+/g, '$1')
-            if (!tmpr || isFinite(tmpr.replace(',', ''))) tmpr = this.GetObjVal(r, c.name, '')
-            row.push(tmpr)
+            let tmpr = this.getCellView(c, r);
+            tmpr = !tmpr ? '' : tmpr + '';
+            tmpr = tmpr.replace(/.+>(.*)<.+/g, '$1');
+            if (!tmpr || isFinite(tmpr.replace(',', ''))) tmpr = this.GetObjVal(r, c.name, '');
+            row.push(tmpr);
           }
         }
-      })
-      return row
+      });
+      return row;
     },
     ExportExcel1(e) {
-      const worksheet = this.CreateExcel()
-      this.CreateHeader(worksheet)
+      let worksheet = this.CreateExcel();
+      this.CreateHeader(worksheet);
       this.data.forEach(r => {
-        worksheet.addRows([this.getDataExcel(r)])
-      })
-      this.SaveExcel()
+        worksheet.addRows([this.getDataExcel(r)]);
+      });
+      this.SaveExcel();
     },
     ExportExcel2(e) {
-      const worksheet = this.CreateExcel()
-      this.CreateHeader(worksheet)
+      let worksheet = this.CreateExcel();
+      this.CreateHeader(worksheet);
       this.visibleData.forEach(r => {
-        worksheet.addRows([this.getDataExcel(r)])
-      })
-      this.SaveExcel()
+        worksheet.addRows([this.getDataExcel(r)]);
+      });
+      this.SaveExcel();
     },
     SaveExcel() {
       this.workbook.xlsx.writeBuffer().then((csvContent) => {
-        const D = document
-        const a = D.createElement('a')
-        const strMimeType = 'application/octet-stream;charset=utf-8'
-        let rawFile
-        const fileName = (this.o_export_fileName || this.name) + '.xlsx'
+        let D = document;
+        let a = D.createElement('a');
+        let strMimeType = 'application/octet-stream;charset=utf-8';
+        let rawFile;
+        let fileName = (this.o_export_fileName || this.name) + ".xlsx";
 
-        // html5 A[download]
-        if ('download' in a) {
-          const blob = new Blob(['', csvContent], { type: strMimeType })
-          rawFile = URL.createObjectURL(blob)
-          a.setAttribute('download', fileName)
+        //html5 A[download]
+        if ("download" in a) {
+          let blob = new Blob(["", csvContent], { type: strMimeType });
+          rawFile = URL.createObjectURL(blob);
+          a.setAttribute("download", fileName);
         } else {
-          rawFile = 'data:' + strMimeType + ',' + encodeURIComponent(csvContent)
-          a.setAttribute('target', '_blank')
+          rawFile = "data:" + strMimeType + "," + encodeURIComponent(csvContent);
+          a.setAttribute("target", "_blank");
         }
-        a.href = rawFile
-        a.setAttribute('style', 'display:none;')
-        D.body.appendChild(a)
+        a.href = rawFile;
+        a.setAttribute("style", "display:none;");
+        D.body.appendChild(a);
         setTimeout(() => {
           if (a.click) {
-            a.click()
+            a.click();
             // Workaround for Safari 5
           } else if (document.createEvent) {
-            var eventObj = document.createEvent('MouseEvents')
-            eventObj.initEvent('click', true, true)
-            a.dispatchEvent(eventObj)
+            var eventObj = document.createEvent("MouseEvents");
+            eventObj.initEvent("click", true, true);
+            a.dispatchEvent(eventObj);
           }
-          D.body.removeChild(a)
-        }, 100)
-      })
+          D.body.removeChild(a);
+        }, 100);
+      });
     },
     CreateExcel() {
-      this.workbook = new ExcelJS.Workbook()
-      this.workbook.creator = 'KKF Connect'
-      this.workbook.lastModifiedBy = 'KKF Connect'
-      this.workbook.created = new Date()
-      this.workbook.modified = new Date()
-      this.workbook.lastPrinted = new Date()
+      this.workbook = new ExcelJS.Workbook();
+      this.workbook.creator = "KKF Connect";
+      this.workbook.lastModifiedBy = "KKF Connect";
+      this.workbook.created = new Date();
+      this.workbook.modified = new Date();
+      this.workbook.lastPrinted = new Date();
 
-      return this.workbook.addWorksheet(this.o_export_sheetName || this.name)
+      return this.workbook.addWorksheet(this.o_export_sheetName || this.name);
     },
     ResetGrid(event) {
       this.fields.forEach((c, i) => {
-        const tmp = this.tableFields.find(x => x.name === c.name)
+        let tmp = this.tableFields.find(x => x.name === c.name);
         if (tmp) {
-          const idx = this.tableFields.indexOf(tmp)
+          let idx = this.tableFields.indexOf(tmp);
           if (i != idx) {
-            this.tableFields.splice(idx, 1)
-            this.tableFields.splice(i + 3, 0, tmp)
+            this.tableFields.splice(idx, 1);
+            this.tableFields.splice(i + 3, 0, tmp);
           }
-          tmp.visible = c.visibleOrg
-          tmp.pin = c.pinOrg
+          tmp.visible = c.visibleOrg;
+          tmp.pin = c.pinOrg;
           if (Array.isArray(c.groups)) {
             c.groups.forEach(g => {
-              const tmp2 = tmp.groups.find(v => v.name === g.name)
-              if (tmp2) tmp2.visible = g.visibleOrg
-            })
+              let tmp2 = tmp.groups.find(v => v.name === g.name);
+              if (tmp2) tmp2.visible = g.visibleOrg;
+            });
           }
         }
-      })
+      });
 
-      this.grid_responsive = document.body.clientWidth >= 768
-      this.showFilter = false
-      this.selectedOnClick = true
-      this.perPage = 10
+      this.grid_responsive = document.body.clientWidth >= 768;
+      this.showFilter = false;
+      this.selectedOnClick = true;
+      this.perPage = 10;
 
-      // unpin
+      //unpin
       if (this.pinFields.length) {
-        this.pinFields.forEach(c => this.unPin(c))
-        this.pinFields = []
+        this.pinFields.forEach(c => this.unPin(c));
+        this.pinFields = [];
       }
-      const pinCol = this.tableFields.filter(c => c.pin)
+      let pinCol = this.tableFields.filter(c => c.pin)
       if (pinCol.length) {
-        this.pinFields.push(...pinCol)
+        this.pinFields.push(...pinCol);
       }
-      this.PerPageChange()
-      this.$emit(this.eventPrefix + 'reset', event, this.name)
+      this.PerPageChange();
+      this.$emit(this.eventPrefix + "reset", event, this.name);
     },
     onKeyDown(e) {
       if (!this.currCell) {
-        return
+        return;
       }
-      e.stopPropagation()
-      let c = document.getElementById(this.currCell)
-      let ud = false
+      e.stopPropagation();
+      let c = document.getElementById(this.currCell);
+      let ud = false;
       if (e.which >= 37 && e.which <= 40) {
-        const t = this.currCell.split('-')
+        let t = this.currCell.split('-');
         if (e.which == 39) { // Right Arrow
-          c = c.nextElementSibling
+          c = c.nextElementSibling;
         } else if (e.which == 37) { // previous Arrow
-          c = c.previousElementSibling
+          c = c.previousElementSibling;
         } else if (e.which == 38) { // Up Arrow
-          t[t.length - 1] = parseInt(t[t.length - 1]) - 1
-          c = document.getElementById(t.join('-'))
+          t[t.length - 1] = parseInt(t[t.length - 1]) - 1;
+          c = document.getElementById(t.join('-'));
           if (!c) {
-            t[t.length - 1] = parseInt(t[t.length - 1]) - 1
-            c = document.getElementById(t.join('-'))
+            t[t.length - 1] = parseInt(t[t.length - 1]) - 1;
+            c = document.getElementById(t.join('-'));
           }
-          ud = true
+          ud = true;
         } else if (e.which == 40) { // Down Arrow
-          t[t.length - 1] = parseInt(t[t.length - 1]) + 1
-          c = document.getElementById(t.join('-'))
+          t[t.length - 1] = parseInt(t[t.length - 1]) + 1;
+          c = document.getElementById(t.join('-'));
           if (!c) {
-            t[t.length - 1] = parseInt(t[t.length - 1]) + 1
-            c = document.getElementById(t.join('-'))
+            t[t.length - 1] = parseInt(t[t.length - 1]) + 1;
+            c = document.getElementById(t.join('-'));
           }
-          ud = true
+          ud = true;
         }
         if (c && c.tabIndex != -1) {
-          this.currCell = c.id
-          c.focus()
+          this.currCell = c.id;
+          c.focus();
           // if (ud) c.click();
         }
       } else if (e.which == 13) {
         if (document.activeElement == c) {
-          c.click()
+          c.click();
         } else {
-          c.focus()
+          c.focus();
         }
       }
     },
     onScroll(e) {
-      this.scrollLeft = e.target.scrollLeft
+      this.scrollLeft = e.target.scrollLeft;
     },
     onColClick(e) {
-      e.stopPropagation()
+      e.stopPropagation();
     },
     onColPreResize(e, field) {
-      this.thResize = document.getElementById(this.name + '_' + field.name)
-      this.fieldResize = field
+      this.thResize = document.getElementById(this.name + '_' + field.name);
+      this.fieldResize = field;
       if (this.thResize) {
-        this.isUnResize = true
-        this.startOffset = this.thResize.offsetWidth - e.pageX
+        this.isUnResize = true;
+        this.startOffset = this.thResize.offsetWidth - e.pageX;
       }
     },
     onColResize(e) {
       if (this.thResize) {
-        this.thResize.style.minWidth = this.startOffset + e.pageX + 'px'
-        this.fieldResize._width = this.startOffset + e.pageX
+        this.thResize.style.minWidth = this.startOffset + e.pageX + 'px';
+        this.fieldResize._width = this.startOffset + e.pageX;
       }
     },
     onColLastResize(e) {
-      this.thResize = undefined
-      this.fieldResize = null
+      this.thResize = undefined;
+      this.fieldResize = null;
     },
     subMenuVisible(field, show) {
-      const col = document.getElementById(this.name + '_' + field.name)
-      if (show) col.classList.add('subMenuVisible')
-      else col.classList.remove('subMenuVisible')
+      let col = document.getElementById(this.name + '_' + field.name);
+      if (show) col.classList.add("subMenuVisible")
+      else col.classList.remove("subMenuVisible")
     },
-    /** ************** pin  ******************/
+    /**************** pin  ******************/
     isPin(field) {
-      return this.pinFields.indexOf(field) >= 0
+      return this.pinFields.indexOf(field) >= 0;
     },
     pinClicked(field) {
       if (!this.isPin(field)) {
-        field.pin = true
-        const pinCol = this.tableFields.filter(c => c.pin)
-        if (pinCol.length) this.pinFields = [...pinCol]
+        field.pin = true;
+        let pinCol = this.tableFields.filter(c => c.pin)
+        if (pinCol.length) this.pinFields = [...pinCol];
       } else {
-        field.pin = false
-        this.pinFields.splice(this.pinFields.indexOf(field), 1)
-        this.unPin(field)
+        field.pin = false;
+        this.pinFields.splice(this.pinFields.indexOf(field), 1);
+        this.unPin(field);
       }
-      this.genCustomSetting()
-      this.genPin()
+      this.genCustomSetting();
+      this.genPin();
     },
     unPin(c) {
-      const colh = document.getElementById(this.name + '_' + c.name)
+      let colh = document.getElementById(this.name + '_' + c.name);
       if (colh) {
-        colh.classList.remove('freeze')
+        colh.classList.remove("freeze")
         colh.style.left = 'inherit'
         if (Array.isArray(c.groups)) {
           c.groups.filter(c2 => c2.visible).forEach(c2 => {
-            const colh2 = document.getElementById(this.name + '_' + c2.name)
+            let colh2 = document.getElementById(this.name + '_' + c2.name);
             if (colh2) {
-              colh2.classList.remove('freeze')
+              colh2.classList.remove("freeze")
               colh2.style.left = 'inherit'
               colh2.style.zIndex = 1
               this.unPinRowFooter(c2)
             }
+
           })
         } else {
           this.unPinRowFooter(c)
@@ -2243,31 +2248,32 @@ export default {
     },
     unPinRowFooter(c) {
       this.visibleData.forEach((d, i) => {
-        const colr = document.getElementById(this.name + '-' + c.name + '-' + i)
+        let colr = document.getElementById(this.name + '-' + c.name + '-' + i);
         if (colr) {
-          colr.classList.remove('freeze')
+          colr.classList.remove("freeze")
           colr.style.left = 'inherit'
         }
-      })
-      const colf = document.getElementById(this.name + '_' + c.name + '_footer')
+
+      });
+      let colf = document.getElementById(this.name + '_' + c.name + '_footer');
       if (colf) {
-        colf.classList.remove('freeze')
+        colf.classList.remove("freeze")
         colf.style.left = 'inherit'
       }
     },
     genPin() {
-      let widthh = 0
-      let widths = 0
+      let widthh = 0;
+      let widths = 0;
       this.pinFields.forEach(c => {
-        const colh = document.getElementById(this.name + '_' + c.name)
+        let colh = document.getElementById(this.name + '_' + c.name);
         if (colh) {
-          colh.classList.add('freeze')
+          colh.classList.add("freeze")
           colh.style.left = widthh + 'px'
           if (Array.isArray(c.groups)) {
             c.groups.filter(c2 => c2.visible).forEach(c2 => {
-              const colh2 = document.getElementById(this.name + '_' + c2.name)
+              let colh2 = document.getElementById(this.name + '_' + c2.name);
               if (colh2) {
-                colh2.classList.add('freeze')
+                colh2.classList.add("freeze")
                 colh2.style.left = widths + 'px'
                 colh2.style.zIndex = 2
                 this.pinRowFooter(c2, widths)
@@ -2277,43 +2283,43 @@ export default {
           } else {
             this.pinRowFooter(c, widthh)
           }
-          widthh += colh.offsetWidth
-          widths = widthh
+          widthh += colh.offsetWidth;
+          widths = widthh;
         }
       })
     },
     pinRowFooter(c, width) {
       this.visibleData.forEach((d, i) => {
-        const colr = document.getElementById(this.name + '-' + c.name + '-' + i)
+        let colr = document.getElementById(this.name + '-' + c.name + '-' + i);
         if (colr) {
-          colr.classList.add('freeze')
+          colr.classList.add("freeze")
           colr.style.left = width + 'px'
         }
       })
-      const colf = document.getElementById(this.name + '_' + c.name + '_footer')
+      let colf = document.getElementById(this.name + '_' + c.name + '_footer');
       if (colf) {
-        colf.classList.add('freeze')
+        colf.classList.add("freeze")
         colf.style.left = width + 'px'
       }
     }
   },
   watch: {
     data(newVal, oldVal) {
-      this.selectedTo = []
-      this.isUnResize = false
+      this.selectedTo = [];
+      this.isUnResize = false;
       if (Array.isArray(newVal)) {
-        let lastRowClick = null
+        let lastRowClick = null;
         if (this.lastRowClick) {
-          lastRowClick = newVal.find(x => x[this.trackBy] == this.lastRowClick[this.trackBy])
+          lastRowClick = newVal.find(x => x[this.trackBy] == this.lastRowClick[this.trackBy]);
         }
-        this.setData(newVal)
+        this.setData(newVal);
         if (lastRowClick) {
-          this.onRowClicked(lastRowClick)
+          this.onRowClicked(lastRowClick);
         } else if (newVal.length > 0) {
-          this.onRowClicked(newVal[0])
+          this.onRowClicked(newVal[0]);
         }
       } else {
-        this.data = []
+        this.data = [];
       }
     },
     selectedTo(newVal, oldVal) {
@@ -2328,17 +2334,17 @@ export default {
         this.allSelected = false
       }
       if (this.btnDefault) {
-        this.onSelected()
+        this.onSelected();
       }
     },
     locale() {
-      this.genTitle()
+      this.genTitle();
     },
     o_grid_responsive(v) {
-      this.grid_responsive = v
+      this.grid_responsive = v;
     }
   }
-}
+};
 </script>
 
 <style scoped>

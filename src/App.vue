@@ -62,23 +62,44 @@ export default {
           this.$router.push('/')
         }
       }
+    },
+    isStaff() {
+      return this.$localStorage.get('UType') != null && this.$localStorage.get('UType') == 'S'
     }
   },
 
   watch: {
     $route(p) {
       this.pathroute = p.path
-      // console.log(this.pathroute.toLowerCase(), !this.pathroute.toLowerCase().includes('signup'))
-      if (!/^[/]member/.test(p.path)) {
-        if (!this.$localStorage.get('Token')) {
+      //console.log(this.pathroute.toLowerCase(), (!/^[/]signup/.test(p.path)))
+	  // if ((!/^[/]member/.test(p.path)) ) {
+      if ((!/^[/]signup/.test(p.path)) && (/^[/]forgotpassword[/]/.test(p.path))) {
+        if (!this.$localStorage.get('Token') && this.$localStorage.get('Token') != undefined) {
           if ((!this.pathroute.toLowerCase().includes('signup') && !this.pathroute.toLowerCase().includes('forgotpassword') &&
            !this.pathroute.toLowerCase().includes('resetpassword'))) {
             this.$router.push('/SignIn')
           }
         } else {
+          if (this.pathroute.toLowerCase().includes('registerqrcode')) {
+            var arrPath = this.pathroute.split('/')
+            var qrcode = ''
+            if (arrPath != null && arrPath.length > 1) {
+              var tmp = arrPath[arrPath.length - 1]
+              qrcode = tmp != 'registerqrcode' ? tmp : null
+            }
+            // console.log(this.pathroute.toLowerCase(), qrcode)
+            if (qrcode != null && qrcode.length > 0) {
+              this.$router.push({
+                name: 'side-menu-product-register',
+                params: { qrcode: qrcode }
+              })
+              return
+            }
+          }
           if (this.$root.isLoaded || this.$root.permissions.length) this.chkpermission()
         }
       }
+
       document.title = (GetObjVal(p, 'meta.title') ? this.getTitle(GetObjVal(p, 'meta.title', '')) + ' - ' : '') + 'KKF Customer Registration'
       this.clearDocument()
     }

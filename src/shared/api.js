@@ -79,35 +79,39 @@ export default {
           this.Call(o)
         },
 
-        // --------------------- User Config ---------------------//
-        UserConfigGet: (o) => {
-          Object.assign(o, { method: 'get', path: 'v1/UserConfig/Get' })
+        // --------------------- Register QR code ---------------------//
+        QrCodeGet: (o) => {
+          Object.assign(o, { method: 'get', path: 'v1/QRCode/Get' })
           this.Call(o)
         },
-        UserConfigSave: (o) => {
-          Object.assign(o, { method: 'post', path: 'v1/UserConfig/Save' })
+        QRCodeSave: (o) => {
+          Object.assign(o, { method: 'post', path: 'v1/QRCode/Save' })
           this.Call(o)
         },
-        UserConfigSearch: (o) => {
-          Object.assign(o, { method: 'post', path: 'v1/UserConfig/Search' })
+        QRCodeSearch: (o) => {
+          Object.assign(o, { method: 'post', path: 'v1/QRCode/Search' })
+          this.Call(o)
+        },
+        QRCodeDummy: (o) => {
+          Object.assign(o, { method: 'post', path: 'v1/QRCode/Dummy' })
           this.Call(o)
         },
 
-        // --------------------- User Notify ---------------------//
-        UserNotifyGet: (o) => {
-          Object.assign(o, { method: 'get', path: 'v1/User/NotifyGet' })
+        // --------------------- Country ---------------------//
+        CountrySearch: (o) => {
+          Object.assign(o, { method: 'post', path: 'v1/Country/Search' })
           this.Call(o)
         },
-        UserNotifySave: (o) => {
-          Object.assign(o, { method: 'post', path: 'v1/User/NotifySave' })
+
+        // --------------------- Dashboard ---------------------//
+        DashboardSearch: (o) => {
+          Object.assign(o, { method: 'post', path: 'v1/Dashboard/Search' })
           this.Call(o)
         },
-        UserNotifyDelete: (o) => {
-          Object.assign(o, { method: 'post', path: 'v1/User/NotifyDelete' })
-          this.Call(o)
-        },
-        UserNotifyList: (o) => {
-          Object.assign(o, { method: 'post', path: 'v1/User/NotifyList' })
+
+        // --------------------- Product Register ---------------------//
+        ProductRegisterSearch: (o) => {
+          Object.assign(o, { method: 'post', path: 'v1/ProductRegister/Search' })
           this.Call(o)
         }
 

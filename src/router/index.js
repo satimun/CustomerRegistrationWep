@@ -1,11 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SideMenu from '../layouts/side-menu/Main.vue'
 import TopMenu from '../layouts/top-menu/Main.vue'
-import SimpleMenu from '../layouts/simple-menu/Main.vue'
-
 import TopMenuRoutes from './TopMenu'
 import SideMenuRoutes from './SideMenu'
-import SimpleMenuRoutes from './SimpleMenu'
 
 import ErrorPage from '../views/error-page/Main.vue'
 
@@ -24,11 +21,6 @@ const routes = [
     path: '/top-menu',
     component: TopMenu,
     children: TopMenuRoutes
-  },
-  {
-    path: '/simple-menu',
-    component: SimpleMenu,
-    children: SimpleMenuRoutes
   },
   {
     path: '/signin',
@@ -54,11 +46,8 @@ const routes = [
     path: '/error-page',
     name: 'error-page',
     component: ErrorPage
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    component: ErrorPage
   }
+
 ]
 
 const router = createRouter({

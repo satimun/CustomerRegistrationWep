@@ -3,6 +3,8 @@ import api from './api'
 import axios from './instance'
 import { h } from 'vue'
 import Toastify from 'toastify-js'
+import moment from 'moment'
+moment.locale('en')
 
 export default {
   mixins: [api],
@@ -28,7 +30,15 @@ export default {
       saveRequire: false,
       permissions: [],
       isLoaded: false,
-      socket: null
+      socket: null,
+      publicPath: process.env.VUE_APP_API,
+      imgPath: require('@/assets/images/profile.png'),
+      location: {
+        longitude: null,
+        latitude: null
+      },
+      avatar_path: null,
+      qrcodes: null
     }
   },
   methods: {
@@ -277,20 +287,41 @@ export default {
         })
         .catch((error) => {
           console.error(error)
+          // console.log('path', this.pathroute)
           if (/^O0/.test(GetObjVal(error, 'response.data.code'))) {
             if (/SingleSignOn/.test(o.path)) {
               // window.location.href = '/member/signin';
               if (process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test') {
-                window.location.href = '/member/signin'
+                window.location.href = '/signin'
               } else {
-                window.location.href = `${process.env.VUE_APP_SINGLESIGNON}member/signin?backurl=${encodeURI(window.location.href)}`
+                // window.location.href = `${process.env.VUE_APP_SINGLESIGNON}signin?backurl=${encodeURI(window.location.href)}`
+                window.location.href = `/signin?backurl=${encodeURI(window.location.href)}`
               }
             } else {
-              if (/^[/]member[/]/.test(window.location.pathname)) {
-                window.location.href = '/member/singlesignon'
+              // if (/^[/]member[/]/.test(window.location.pathname)) {
+			  if ((/^[/]signup[/]/.test(window.location.pathname)) || (/^[/]forgotpassword[/]/.test(window.location.pathname))){
+                // window.location.href = '/member/singlesignon'
+                window.location.href = '/signin'
               } else {
                 if (window.location.pathname) {
-                  window.location.href = '/member/singlesignon?path=' + window.location.pathname
+                  // window.location.href = '/member/singlesignon?path=' + window.location.pathname
+                  const basepath = process.env.VUE_APP_BARCODE_ROUTE_PATH
+                  var tmpPath = this.$route.path
+                  // console.log(this.$route)
+                  // console.log('path', this.$route.params.qrcode)
+                  if (tmpPath != null && (typeof tmpPath == 'string' && tmpPath.indexOf('/') > -1)) {
+                    if (tmpPath.includes(basepath)) {
+                      var path = tmpPath + '/' + this.$route.params.qrcode
+                      // console.log('path', path)
+                      window.location.href = '/signin?path=' + path
+                    } else {
+                      // console.log('tmpPath', tmpPath, basepath)
+                      window.location.href = '/signin?path=' + window.location.pathname
+                    }
+                  } else {
+                    window.location.href = '/signin?path=' + window.location.pathname
+                  }
+                  // window.location.href = '/signin?path=' + window.location.pathname
                 }
               }
             }
@@ -301,11 +332,93 @@ export default {
               if (GetObjVal(error, 'response.data.message')) {
                 this.$root.AlertMessage('error', GetObjVal(error, 'response.data.message'))
               } else {
-                this.$root.AlertMessage('error', this.$i18n.messages[this.$i18n.locale].dic.connectservefail)
+                this.$root.AlertMessage('error', this.$t('dic.connectservefail'))
               }
             }
           }
         })
+    },
+    moment: function () {
+      return moment()
+    },
+
+    momentDate(value) {
+      return moment(String(value)).format('YYYY-MM-DD')
+    },
+
+    tomorrow(value) {
+      return moment(String(value)).add(1, 'days')
+    },
+
+    yesterday(value) {
+      return moment(String(value)).add(-1, 'days')
+    },
+
+    formatDate (value) {
+      return moment(String(value)).format('DD/MM/YYYY')
+    },
+
+    formatDateTime (value) {
+      return moment(String(value)).format('DD/MM/YYYY HH:mm:ss')
+    },
+
+    formatDateDB (value) {
+      return moment(String(value)).format('MM/DD/YYYY HH:mm:ss')
+    },
+    imageUrlAlt(e) {
+      e.target.src = this.imgPath
+    },
+    getGeolocation() {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          // console.log('Geolocation', position)
+          this.location.latitude = position.coords.latitude
+          this.location.longitude = position.coords.longitude
+        },
+        error => {
+          console.log('Geolocation', error.message)
+        }
+      )
+    },
+    isStaff() {
+      return this.$localStorage.get('UType') != null && this.$localStorage.get('UType') == 'S'
+    },
+    getQrCode(path) {
+      const basepath = process.env.VUE_APP_BARCODE_SCAN_PATH
+      var qrcode = ''
+      // console.log(path, basepath)
+      if (path != null) {
+        if (path.includes('/')) {
+          if (path.includes(basepath)) {
+            var arrPath = path.split(basepath)
+            if (arrPath != null && arrPath.length > 0) {
+              qrcode = arrPath[arrPath.length - 1]
+            }
+          }
+        } else {
+          qrcode = path
+        }
+      }
+
+      return qrcode
+    },
+    validQrCodeScanPath(path) {
+      const basepath = process.env.VUE_APP_BARCODE_SCAN_PATH
+      // console.log(path, (typeof path == 'string' && path.indexOf('/') > -1))
+      var state = false
+      if (path != null) {
+        if (typeof path == 'string' && path.indexOf('/') > -1) {
+          if (path.includes(basepath)) {
+            var arrPath = path.split(basepath)
+            if (arrPath != null && arrPath.length > 0) {
+              state = true
+            }
+          }
+        } else {
+          state = true
+        }
+      }
+      return state
     }
   }
 }

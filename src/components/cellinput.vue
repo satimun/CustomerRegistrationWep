@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { GetObjVal } from '@/shared/utils'
+import { GetObjVal } from "@/shared/utils";
 export default {
   props: {
     input: {
@@ -90,42 +90,42 @@ export default {
   },
   computed: {
     valueField() {
-      return GetObjVal(this.input, 'valueField', this.input.type == 'select' ? 'value' : 'id')
+      return GetObjVal(this.input, 'valueField', this.input.type == 'select' ? 'value' : 'id');
     },
     textField() {
       return GetObjVal(this.input, 'textField', this.input.type == 'select' ? 'text' : '_label')
     }
   },
   mounted() {
-    this.value = this.input.value
-    setTimeout(() => { this.focusRef(this.$refs.input) }, 250)
+    this.value = this.input.value;
+    setTimeout(() => { this.focusRef(this.$refs.input); }, 250);
   },
   data() {
     return {
       value: null,
-      isCommit: false
+      isCommit: false,
     }
   },
   methods: {
     onChange(e) {
-      this.value = e
-      this.isCommit = true
-      this.focusParent()
+      this.value = e;
+      this.isCommit = true;
+      this.focusParent();
     },
     onInput(e) {
-      this.isCommit = true
-      this.value = this.input.value
+      this.isCommit = true;
+      this.value = this.input.value;
     },
     onClick(e) {
-      e.stopPropagation()
+      e.stopPropagation();
     },
     onKeyDown(e) {
       if (e.which >= 37 && e.which <= 40) {
-        e.stopPropagation()
+        e.stopPropagation();
       } else if (e.which == 13) {
-        e.stopPropagation()
-        this.isCommit = true
-        this.focusParent()
+        e.stopPropagation();
+        this.isCommit = true;
+        this.focusParent();
       }
     },
     focusRef(ref) {
@@ -137,17 +137,17 @@ export default {
       })
     },
     focusParent() {
-      this.$el.parentElement.focus()
+      this.$el.parentElement.focus();
     }
   },
   updated() {
-    // console.log('updated');
+    //console.log('updated');
   },
-  beforeUnmount() {
+  beforeDestroy() {
     if (this.isCommit) {
-      this.$emit('onchange', this.value)
+      this.$emit("onchange", this.value);
     }
-    this.$emit('onblur')
+    this.$emit("onblur");
   }
 }
 </script>

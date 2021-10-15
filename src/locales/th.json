@@ -1,7 +1,7 @@
 {
     "config" : {
-        "title1": "Product",
-        "title2": "Registration"
+        "title1": "KKF",
+        "title2": "Product Registration"
       },
     "button" : {
         "signin" : "Sign In",
@@ -9,12 +9,59 @@
         "register" : "Register",
         "login" : "Login",
         "resetpassword" : "Reset Password",
-        "changepassword" : "Change Password"
+        "changepassword" : "Change Password",
+		"save" : "Save",
+		"ok" : "OK",
+		"cancel" : "Cancel",
+		"go" : "GO",
+		"reset" : "Reset"
     },
     "dic": {
         "error": "Error",
         "warning": "Warning",
-        "success": "Success"
+        "success": "Success",
+        "lang" : "ภาษา",
+        "connectservefail": "Unable to connect to server.",
+		"rowselect": " | {n} รายการเลือก | {n} รายการเลือก",
+		"hidefilter": "ปิดตัวกรองข้อมูล",
+		"viewsetting": "ตั้งค่า/การแสดงผล",
+		"columshow": "ซ่อน/แสดงคอลัมน์",
+		"scrollh": "แสดงแถบเลื่อนแนวนอน",
+		"export1": "ส่งออกไฟล์ excel",
+		"export2": "ส่งออกไฟล์ excel เฉพาะที่แสดง",
+		"reset": "Reset",
+		"selectedonclick": "เลือกเมื่อคลิก",
+		"sortascending": "เรียงลำดับจากน้อยไปมาก",
+		"sortdescending": "เรียงลำดับจากมากไปน้อย",
+		"hidecolumn": "ซ่อนคอลัมน์",
+		"pin": "ปักหมุด",
+		"unpin": "เลิกปักหมุด",
+		"filter": "กรองข้อมูล",
+		"search": "ค้นหา",
+		"add": "เพิ่ม",
+		"clone": "โคลน",
+		"view": "ดู",
+		"edit": "แก้ไข",
+		"delete": "ลบ",
+		"deleted": "ลบข้อมูลเรียบร้อย",
+		"_no": "เลขที่",
+		"code": "รหัส",
+		"description": "คำอธิบาย",
+		"status": "สถานะ",
+		"lastupdate": "แก้ไขล่าสุด",
+		"nodata": "ไม่มีข้อมูล",
+		"show": "แสดง",
+		"all": "ทั้งหมด",
+		"entries": "รายการ",
+		"previous": "ก่อนหน้า",
+		"next": "ต่อไป",
+		"ok": "ตกลง",
+		"save": "บันทึก",
+		"saved": "บันทึกข้อมูลเรียบร้อย",
+		"cancel": "ยกเลิก",
+		"msgdel": "ยืนยันการลบข้อมูล",
+		"reload": "Reload Data",
+		"more": "See more"
     },
     "signup": {
         "title1": "ลงทะเบียน",
@@ -52,7 +99,9 @@
         "conftext": "Email Verification Success",
         "welcome": "Welcome To KKF Customer Registration.",
         "failtext": "Email Verification Fail.",
-        "contacttext": "Please Contact Administrator."
+        "contacttext": "Please Contact Administrator.",
+		"memer": "Already have an Account? ",
+		"sigin": "Sign in"
       },
       "signin" : {
         "title1": "Product",
@@ -61,12 +110,14 @@
         "introInfo2": "sign in to your account.",
         "introInfo3": "Manage all your registered products in one place.",
         "introForm": "A few more clicks to sign in to your account. Manage all your registered products in one place",
-        "subject": "การเข้าสุ่ระบบ",
+        "subject": "การเข้าสู่ระบบ",
         "remember_me": "Remember me",
         "forgot_password": "Forgot Password?",
         "agree": "By signin up, you agree to our",
         "term": "Terms and Conditions",
-        "policy": "Privacy Policy"
+        "policy": "Privacy Policy",
+		"notmemer": "Not registered yet?",
+		"create_account": "Create an Account"
 
       },
       "forgotpassword" : {
@@ -81,5 +132,49 @@
         "warntext": "โปรดตรวจสอบอีเมลของคุณเพื่อเปลี่ยนรหัสผ่าน",
         "success": "เปลี่ยนรหัสผ่านสำเร็จ"
 
-      }
+      },
+	  "dashboard_user":{
+		"title1":"My KKF",
+		"title2": "รายการสินค้าที่ Register 5 อันดับล่าสุด",
+		"register_pc" : "จน.ผืนที่ Regiser",
+		"register_bc" : "จน.QR codeที่ Regiser",
+		"pi_qty" : "จน.PI",
+		"bc_inprogress" : "จน. B/C ระหว่างส่ง"
+	},
+	"registerqrcode": {
+		"title1": "Register KKF Product",
+		"info1": "Please input your qrcode.",
+		"qrscanpath" : "QR scan path",
+		"location" : "Location",
+		"coordinate" : "GPS coordinate",
+		"info2": "Thank you for your product registration",
+		"qrcode": "QR Code",
+		"orderno": "Order No.",
+		"product": "Product Detail",
+		"export_date": "Export (CI Date)",
+		"register_date" : "Register Date"
+
+	},
+	"report_user" : {
+		"title1": "My Products",
+		"field": "Field",
+		"qrcode":"Qr code",
+		"product":"Product detail",
+		"orderno":"Order No.",
+		"type":"Type",
+		"value":"Value"
+	},
+	"dashboard_staff":{
+		"title1":"My KKF",
+		"title2": "รายการสินค้าที่ Register 5 อันดับล่าสุด",
+		"register_pc" : "จน.ผืนที่ Regiser",
+		"register_bc" : "จน.QR codeที่ Regiser",
+		"pi_qty" : "จน.PI",
+		"bc_inprogress" : "จน. B/C ระหว่างส่ง",
+		"order_qty" : "จน. Order",
+		"registerid_qty" : "จน.ลูกค้าที่ Register",
+		"qrcode_qty" : "จน. B/C ที่สร้าง",
+		"barcode_qty" : "จน. B/C ที่กำกับส่งออก",
+		"bc_progress" : "จน. B/C ที่ส่งให้ลูกค้า"
+	}
 }

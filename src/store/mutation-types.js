@@ -1,1 +1,6 @@
 export const SET_DARK_MODE = 'SET_DARK_MODE'
+export const SET_USER_PICTURE = 'SET_USER_PICTURE'
+export const SET_USER_CODE = 'SET_USER_CODE'
+export const SET_USER_NAME = 'SET_USER_NAME'
+export const SET_USER_TYPE = 'SET_USER_TYPE'
+export const SET_USER_EMAIL = 'SET_USER_EMAIL'

@@ -3,19 +3,20 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['plugin:vue/vue3-essential', '@vue/standard'],
+  'extends': [
+    'plugin:vue/essential',
+    'eslint:recommended'
+  ],
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+	"no-unused-vars": "off",
+	"no-mixed-spaces-and-tabs": 0, // disable rule,
+	 "no-empty": "off",
+	 "no-undef": "off",
+	 "no-extra-semi": "off"
+  },
   parserOptions: {
     parser: 'babel-eslint'
-  },
-  rules: {
-    eqeqeq: 'off',
-    'no-new': 'off',
-    'no-unused-expressions': 'off',
-    'space-before-function-paren': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-  },
-  globals: {
-    cash: true
   }
 }

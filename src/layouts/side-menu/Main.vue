@@ -132,6 +132,7 @@
         <!-- END: Content -->
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -145,13 +146,15 @@ import MobileMenu from '@/components/mobile-menu/Main.vue'
 import DarkModeSwitcher from '@/components/dark-mode-switcher/Main.vue'
 import SideMenuTooltip from '@/components/side-menu-tooltip/Main.vue'
 import { linkTo, nestedMenu, enter, leave } from './index'
+import Footer from '@/components/footer/main.vue'
 
 export default defineComponent({
   components: {
     TopBar,
     MobileMenu,
     DarkModeSwitcher,
-    SideMenuTooltip
+    SideMenuTooltip,
+    Footer
   },
   setup() {
     const route = useRoute()

@@ -12,11 +12,11 @@
           >
             <img
               alt="Icewall Tailwind HTML Admin Template"
-              class="w-6"
+              class="h-10"
               :src="require(`@/assets/images/logokkf.png`)"
             />
             <span class="text-white text-lg ml-3">
-              {{$t('signup.title1')}} <span class="font-medium"> {{$t('signup.title2')}}</span>
+              {{$t('config.title1')}} <span class="font-medium"> {{$t('config.title2')}}</span>
             </span>
 
           </a>
@@ -165,6 +165,7 @@
                   <input
                     id="form-shipowner_amt"
                     type="number"
+                    min="0"
                     class="form-control intro-x  py-2 px-3 border-gray-300 block mt-4"
                     placeholder="Total Ship Owner"
                     v-model="form.shipowner_amt"
@@ -180,6 +181,7 @@
                   <input
                     id="form-shipusekkfnet_amt"
                     type="number"
+                    min="0"
                     class="form-control intro-x  py-2 px-3 border-gray-300 block mt-4"
                     placeholder="Total Ship use KKF Nets"
                     v-model="form.shipusekkfnet_amt"
@@ -260,19 +262,21 @@
             </div>
             <div class="intro-x mt-3 xl:mt-3 text-center xl:text-left">
               <button
-                class="btn btn-primary py-2 px-3 w-full xl:w-32 xl:mr-3 align-top"
+                class="btn btn-primary py-2 px-3 w-full align-top"
                 type="submit"
                 @click="onSubmit"
               >
                 {{$t('button.register')}}
               </button>
-              <button
-                class="btn btn-outline-secondary py-2 px-3 w-full xl:w-32 mt-3 xl:mt-0 align-top"
-                @click="signin"
-              >
-                {{$t('button.signin')}}
-              </button>
             </div>
+			<div
+              class="intro-x flex text-gray-700 dark:text-gray-600 text-xs sm:text-sm mt-4"
+            >
+			<div class="flex items-center mr-auto">
+				{{$t('signup.memer')}} <a href="javascript:;" @click="signin" class="text-theme-1 pl-2"> {{$t('signup.sigin')}}</a>
+			</div>
+
+			</div>
           </div>
         </div>
         <!-- END: Register Form -->
@@ -327,6 +331,12 @@
               >
                 {{$t('signup.resendemail')}}
               </button>
+              <button
+                class="btn btn-outline-secondary py-2 px-3 w-full xl:w-32 mt-3 xl:mt-0 align-top"
+                @click="signin"
+              >
+                {{$t('button.signin')}}
+              </button>
             </div>
             <div class="intro-x w-full grid grid-cols-12 gap-4 h-1 mt-5">
                 <div class="col-span-3 h-full rounded bg-theme-10"></div>
@@ -380,7 +390,7 @@
               class="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left text-danger"
             >
               {{$t('signup.failtext')}}
-            </h2>
+        </h2>
             <div
               class="intro-x mt-2 text-gray-500 dark:text-gray-500 text-center"
             >
@@ -394,14 +404,14 @@
               >
                 {{$t('button.register')}}
               </button>
-              <button
+			  <button
                 class="btn btn-outline-secondary py-2 px-3 w-full xl:w-32 mt-3 xl:mt-0 align-top"
                 @click="signin"
               >
                 {{$t('button.signin')}}
               </button>
             </div>
-            </div>
+        </div>
 </div>
     </div>
 
@@ -455,10 +465,12 @@ export default defineComponent({
         data: {
           email: this.$route.query.email,
           code: this.$route.query.code,
-          emailconfirm_flag: this.$route.query.emailconfirm
+          emailconfirm: this.$route.query.emailconfirm
         },
         callback: res => {
-          this.vsuccess = true
+          if (res != null && res.emailconfirm_flag == 'Y' && res.status == 'A') {
+            this.vsuccess = true
+          }
         }
       })
     }
@@ -573,7 +585,7 @@ export default defineComponent({
       this.$root.api.MemberResendEmail({
         data: { email: this.$route.query.email },
         callback: res => {
-          this.$root.AlertMessage('success')
+          this.$root.AlertMessage('success', 'Resend email success!!')
         }
       })
     },

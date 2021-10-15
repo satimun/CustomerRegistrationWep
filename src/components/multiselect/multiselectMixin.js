@@ -14,30 +14,30 @@ function includes(str, query) {
   if (str === null) str = 'null'
   if (str === false) str = 'false'
   const text = str.toString().toLowerCase()
-  return text.indexOf(query.trim()) // old !== -1
+  return text.indexOf(query.trim()); //old !== -1
 }
 
 // add by SoMRuk
 function objArrSort(objArr, key, direction = 'asc') {
-  direction = direction == 'asc' ? '>' : '<'
-  let sort = 'a.'.concat(key, ' ', direction, ' ', 'b.', key, ' ? ', '1', ' : ', 'a.', key, ' == ', 'b.', key, ' ? ', '0', ' : ', '-1')
-  sort = eval('(a, b) => { return ' + sort + ' }')
-  return objArr.sort(sort)
+  direction = direction == 'asc' ? '>' : '<';
+  let sort = "a.".concat(key, ' ', direction, ' ', 'b.', key, ' ? ', '1', ' : ', 'a.', key, ' == ', 'b.', key, ' ? ', '0', ' : ', '-1');
+  sort = eval("(a, b) => { return " + sort + " }");
+  return objArr.sort(sort);
 }
 
 function filterOptions(options, search, label, customLabel) {
-  const tmp = []
+  let tmp = [];
   options.forEach(option => {
     if (typeof option === 'object') {
-      option._sort = includes(customLabel(option, label), search)
+      option._sort = includes(customLabel(option, label), search);
       if (option._sort !== -1) {
-        tmp.push(option)
+        tmp.push(option);
       }
-    } else {
-      if (includes(customLabel(option, label), search) !== -1) tmp.push(option)
+    } else {      
+      if (includes(customLabel(option, label), search) !== -1) tmp.push(option);
     }
-  })
-  return objArrSort(tmp, '_sort')
+  });
+  return objArrSort(tmp, '_sort');
   // old return options.filter(option => includes(customLabel(option, label), search))
 }
 
@@ -65,7 +65,7 @@ function filterGroups(search, label, values, groupLabel, customLabel) {
     groups.map(group => {
       /* istanbul ignore else */
       if (!group[values]) {
-        console.warn('Options passed to vue-multiselect do not contain groups, despite the config.')
+        console.warn(`Options passed to vue-multiselect do not contain groups, despite the config.`)
         return []
       }
       const groupOptions = filterOptions(group[values], search, label, customLabel)
@@ -335,7 +335,7 @@ export default {
     preselectFirst: {
       type: Boolean,
       default: false
-    }
+    }    
   },
   mounted() {
     /* istanbul ignore else */
@@ -500,7 +500,7 @@ export default {
       /* istanbul ignore else */
       if (option.$isLabel) return option.$groupLabel
 
-      const label = this.customLabel(option, this.label)
+      let label = this.customLabel(option, this.label)
       /* istanbul ignore else */
       if (isEmpty(label)) return ''
       return label
@@ -544,12 +544,12 @@ export default {
 
         if (this.multiple) {
           if (key.shiftKey && this.internalValue[this.internalValue.length - 1]) { /* Add By SoMRuk */
-            const start = this.filteredOptions.indexOf(this.internalValue[this.internalValue.length - 1])
-            const end = this.filteredOptions.indexOf(option)
-            this.internalValue.splice(this.internalValue.length - 1, 1)
-            this.$emit('input', this.internalValue.concat(this.filteredOptions.slice(start, end + 1)), this.id)
+            let start = this.filteredOptions.indexOf(this.internalValue[this.internalValue.length - 1]);
+            let end = this.filteredOptions.indexOf(option);
+            this.internalValue.splice(this.internalValue.length - 1, 1);
+            this.$emit('input', this.internalValue.concat(this.filteredOptions.slice(start, end + 1)), this.id);
           } else {
-            this.$emit('input', this.internalValue.concat([option]), this.id)
+            this.$emit('input', this.internalValue.concat([option]), this.id);
           }
         } else {
           this.$emit('input', option, this.id)

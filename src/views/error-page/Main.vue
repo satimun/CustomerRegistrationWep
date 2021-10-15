@@ -23,6 +23,7 @@
           </div>
           <button
             class="intro-x btn py-3 px-4 text-white border-white dark:border-dark-5 dark:text-gray-300 mt-10"
+            @click="onHome"
           >
             Back to Home
           </button>
@@ -48,6 +49,11 @@ export default defineComponent({
         .removeClass('login')
         .addClass('error-page')
     })
+  },
+  methods: {
+    onHome() {
+      this.$router.push('/')
+    }
   }
 })
 </script>

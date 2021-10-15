@@ -85,7 +85,6 @@
               <button
                 class="btn btn-primary py-3 px-4 w-full xl:w-40 xl:mr-3 align-top"
                 type="submit"
-                @click="onSubmit"
               >
                 {{$t('button.resetpassword')}}
               </button>
@@ -174,9 +173,8 @@
 
                   <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
               <button
-                class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top"
+                class="btn btn-primary py-3 px-4 w-full xl:w-40 xl:mr-3 align-top"
                 type="submit"
-                @click="onReset"
               >
                 {{$t('button.resetpassword')}}
               </button>

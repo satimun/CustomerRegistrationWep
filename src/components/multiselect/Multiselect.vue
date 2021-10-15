@@ -170,7 +170,7 @@
 <script>
 import multiselectMixin from './multiselectMixin'
 import pointerMixin from './pointerMixin'
-import resize from 'vue-resize-directive'
+import resize from "vue-resize-directive";
 
 export default {
   name: 'vue-multiselect',
@@ -315,12 +315,12 @@ export default {
       type: Number,
       default: 0
     },
-    cellInput: { // by SoMRuk
+    cellInput: { //by SoMRuk
       type: Boolean,
       default: false
     },
     state: {
-      type: Boolean, // by SoMRuk
+      type: Boolean, //by SoMRuk
       default: true
     }
   },
@@ -373,7 +373,7 @@ export default {
         : { display: 'block' }
     },
     isAbove() {
-      return false // by SoMRuk
+      return false; // by SoMRuk
       if (this.openDirection === 'above' || this.openDirection === 'top') {
         return true
       } else if (
@@ -395,18 +395,18 @@ export default {
       )
     },
     positionTop() {
-      return !this.offsetTop || !this.cellInput ? 'auto' : (this.offsetTop - this.scrollTop) + 'px'
+      return !this.offsetTop || !this.cellInput ? 'auto' : (this.offsetTop - this.scrollTop) + 'px';
     },
     positionLeft() {
-      return !this.offsetLeft || !this.cellInput ? 'auto' : this.offsetLeft + 'px'
+      return !this.offsetLeft || !this.cellInput ? 'auto' : this.offsetLeft + 'px';
     }
   },
   mounted() {
     if (this.cellInput) {
-      document.addEventListener('scroll', (e) => {
-        this.scrollTop = window.pageYOffset || document.documentElement.scrollTop
-      })
-      this.offsetTop = (this.$refs.multiselect.offsetHeight + this.$refs.multiselect.getBoundingClientRect().top) - document.body.getBoundingClientRect().top
+      document.addEventListener("scroll", (e) => {
+        this.scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      });
+      this.offsetTop = (this.$refs.multiselect.offsetHeight + this.$refs.multiselect.getBoundingClientRect().top) - document.body.getBoundingClientRect().top;
     }
   },
   data() {
@@ -415,31 +415,31 @@ export default {
       scrollTop: 0,
       offsetTop: 0,
       offsetLeft: 0,
-      width: 0
+      width: 0,
     }
   },
   methods: {
     onResize(e) {
-      this.optimizedWidth = e.offsetWidth
+      this.optimizedWidth = e.offsetWidth;
       if (this.cellInput) {
         if (e.offsetWidth < this.width || !this.width) {
-          this.width = e.offsetWidth
+          this.width = e.offsetWidth;
         }
       }
     },
     onClick(e) {
       if (e.target.className === 'multiselect__tags') {
-        this.optimizedWidth = e.target.offsetWidth
+        this.optimizedWidth = e.target.offsetWidth;
       }
     }
   },
   watch: {
     isOpen(val) {
       if (val) {
-        this.scrollTop = window.pageYOffset || document.documentElement.scrollTop
+        this.scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         setTimeout(() => {
-          this.offsetLeft = this.$refs.multiselect.getBoundingClientRect().left
-        })
+          this.offsetLeft = this.$refs.multiselect.getBoundingClientRect().left;
+        });
       }
     }
   }

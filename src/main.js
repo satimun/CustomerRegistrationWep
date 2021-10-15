@@ -19,7 +19,7 @@ import VueClipboard from 'vue-clipboard2'
 
 import resize from 'vue-resize-directive'
 
-import Draggable from 'vuedraggable'
+import Draggable from 'vue3-draggable'
 
 // import dic from '@/shared/dic'
 // import { createI18n } from 'vue-i18n'
@@ -29,10 +29,27 @@ import VueProgressBar from '@aacassandra/vue3-progressbar'
 import coremixin from '@/shared/coremixin'
 import i18n from '@/i18n'
 
+import moment from 'moment'
+import QrReader from 'vue3-qr-reader'
+
+import directive from '@/directive'
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas);
+import { fab } from '@fortawesome/free-brands-svg-icons';
+library.add(fab);
+import { far } from '@fortawesome/free-regular-svg-icons';
+library.add(far);
+import { dom } from "@fortawesome/fontawesome-svg-core";
+dom.watch();
+
 // ---End
 
 // SASS Theme
 import './assets/sass/app.scss'
+moment.locale('en')
 
 /* const i18n = createI18n({
   legacy: false,
@@ -68,6 +85,9 @@ const app = createApp(App)
   .use(resize)
   .use(VueProgressBar, options)
   .mixin(coremixin)
+  .use(QrReader)
+  .use(directive)
+  .component("font-awesome-icon", FontAwesomeIcon)
 
 globalComponents(app)
 utils(app)
